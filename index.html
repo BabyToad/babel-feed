@@ -1,0 +1,4166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ACCELERANDO! // FEED</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Space+Grotesk:wght@300;400;500;700&display=swap');
+
+        :root {
+            --bg-void: #0a0a0c;
+            --bg-card: #111115;
+            --bg-card-hover: #16161b;
+            --border-dim: #1e1e24;
+            --border-bright: #2a2a33;
+            --text-dim: #5a5a6a;
+            --text-mid: #8a8a9a;
+            --text-bright: #c8c8d8;
+            --text-white: #e8e8f0;
+            --accent-cyan: #00d4ff;
+            --accent-magenta: #ff00aa;
+            --accent-orange: #ff6a00;
+            --accent-green: #00ff88;
+            --accent-red: #ff3355;
+            --accent-yellow: #ffcc00;
+            --doom-gradient: linear-gradient(135deg, #1a0a1a 0%, #0a0a1a 50%, #0a1a1a 100%);
+
+            /* CRUELTY SQUAD PALETTE */
+            --flesh-pink: #e8b4b8;
+            --flesh-dark: #c4848a;
+            --sickly-green: #9acd32;
+            --bile-yellow: #ccff00;
+            --corporate-blue: #4169e1;
+            --meat-red: #8b0000;
+            --pus-yellow: #eedc82;
+            --bruise-purple: #663399;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: var(--bg-void);
+            color: var(--text-bright);
+            line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Back to top button */
+        .back-to-top {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            background: var(--bg-card);
+            border: 1px solid var(--accent-cyan);
+            color: var(--accent-cyan);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.2rem;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .back-to-top:hover {
+            background: var(--accent-cyan);
+            color: var(--bg-void);
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.4);
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .back-to-top::before {
+            content: '↑';
+        }
+
+        /* CRT Scanline overlay - enhanced */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 1px,
+                rgba(0, 0, 0, 0.08) 1px,
+                rgba(0, 0, 0, 0.08) 2px
+            );
+            pointer-events: none;
+            z-index: 9999;
+            animation: scanline-flicker 0.1s infinite;
+        }
+
+        /* CRT flicker effect */
+        @keyframes scanline-flicker {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.98; }
+        }
+
+        /* CRT screen curve vignette */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(ellipse at center, transparent 60%, rgba(0,0,0,0.4) 100%);
+            pointer-events: none;
+            z-index: 9998;
+        }
+
+        /* Animated noise background */
+        .noise-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9996;
+            opacity: 0.03;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+            animation: noise-shift 0.5s steps(10) infinite;
+        }
+
+        @keyframes noise-shift {
+            0%, 100% { transform: translate(0, 0); }
+            10% { transform: translate(-5%, -5%); }
+            20% { transform: translate(5%, 5%); }
+            30% { transform: translate(-5%, 5%); }
+            40% { transform: translate(5%, -5%); }
+            50% { transform: translate(-2%, 2%); }
+            60% { transform: translate(2%, -2%); }
+            70% { transform: translate(-3%, -3%); }
+            80% { transform: translate(3%, 3%); }
+            90% { transform: translate(-1%, 1%); }
+        }
+
+        /* Screen edge glow */
+        .edge-glow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9995;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .edge-glow.cyan {
+            box-shadow: inset 0 0 100px rgba(0, 212, 255, 0.15);
+            opacity: 0.5;
+        }
+
+        .edge-glow.magenta {
+            box-shadow: inset 0 0 100px rgba(255, 0, 170, 0.15);
+            opacity: 0.5;
+        }
+
+        .edge-glow.red {
+            box-shadow: inset 0 0 150px rgba(255, 51, 85, 0.2);
+            opacity: 0.7;
+        }
+
+        /* CRUELTY SQUAD - Flesh glow at extreme doom */
+        .edge-glow.flesh {
+            box-shadow: inset 0 0 200px rgba(232, 180, 184, 0.25);
+            opacity: 0.8;
+        }
+
+        /* Glitch effect keyframes */
+        @keyframes glitch-1 {
+            0%, 100% { clip-path: inset(0 0 0 0); transform: translate(0); }
+            20% { clip-path: inset(20% 0 60% 0); transform: translate(-2px, 0); }
+            40% { clip-path: inset(40% 0 40% 0); transform: translate(2px, 0); }
+            60% { clip-path: inset(60% 0 20% 0); transform: translate(-1px, 0); }
+            80% { clip-path: inset(80% 0 0 0); transform: translate(1px, 0); }
+        }
+
+        @keyframes glitch-color {
+            0%, 100% { text-shadow: 0 0 20px var(--accent-cyan); }
+            25% { text-shadow: -2px 0 var(--accent-magenta), 2px 0 var(--accent-cyan); }
+            50% { text-shadow: 2px 0 var(--accent-magenta), -2px 0 var(--accent-cyan); }
+            75% { text-shadow: -1px 0 var(--accent-magenta), 1px 0 var(--accent-cyan); }
+        }
+
+        /* CRUELTY SQUAD - Chromatic Aberration */
+        .chromatic-aberration {
+            position: relative;
+        }
+
+        .chromatic-aberration::before,
+        .chromatic-aberration::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .chromatic-aberration::before {
+            color: var(--sickly-green);
+            left: 2px;
+            top: -1px;
+            opacity: 0.5;
+            mix-blend-mode: screen;
+        }
+
+        .chromatic-aberration::after {
+            color: var(--flesh-pink);
+            left: -2px;
+            top: 1px;
+            opacity: 0.5;
+            mix-blend-mode: screen;
+        }
+
+        /* CRUELTY SQUAD - Aggressive glitch */
+        @keyframes hostile-glitch {
+            0%, 100% {
+                transform: translate(0);
+                filter: none;
+            }
+            2% {
+                transform: translate(-3px, 2px) skewX(2deg);
+                filter: hue-rotate(90deg) saturate(2);
+            }
+            4% {
+                transform: translate(3px, -2px) skewX(-2deg);
+                filter: hue-rotate(-90deg) saturate(1.5);
+            }
+            6% {
+                transform: translate(0);
+                filter: none;
+            }
+            50% {
+                transform: translate(0);
+                filter: none;
+            }
+            52% {
+                transform: translate(2px, 0) scaleY(1.02);
+                filter: hue-rotate(180deg);
+            }
+            54% {
+                transform: translate(-2px, 0) scaleY(0.98);
+                filter: saturate(3) brightness(1.2);
+            }
+            56% {
+                transform: translate(0);
+                filter: none;
+            }
+        }
+
+        .hostile-glitch {
+            animation: hostile-glitch 4s ease-in-out infinite;
+        }
+
+        /* CRUELTY SQUAD - Visual corruption overlay */
+        .corruption-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9994;
+            opacity: 0;
+            background:
+                repeating-linear-gradient(
+                    0deg,
+                    transparent,
+                    transparent 2px,
+                    rgba(154, 205, 50, 0.08) 2px,
+                    rgba(154, 205, 50, 0.08) 4px
+                ),
+                repeating-linear-gradient(
+                    90deg,
+                    transparent,
+                    transparent 4px,
+                    rgba(232, 180, 184, 0.06) 4px,
+                    rgba(232, 180, 184, 0.06) 8px
+                ),
+                repeating-linear-gradient(
+                    45deg,
+                    transparent,
+                    transparent 10px,
+                    rgba(204, 255, 0, 0.02) 10px,
+                    rgba(204, 255, 0, 0.02) 12px
+                );
+            transition: opacity 0.3s;
+        }
+
+        .corruption-overlay.active {
+            animation: corruption-shift 0.08s steps(4) infinite;
+        }
+
+        /* CRUELTY SQUAD - Subtle corruption always present above 40% doom */
+        .corruption-overlay.mild {
+            opacity: 0.3;
+        }
+
+        @keyframes corruption-shift {
+            0% { background-position: 0 0, 0 0; }
+            33% { background-position: 2px 1px, -1px 2px; }
+            66% { background-position: -1px -1px, 2px -1px; }
+            100% { background-position: 0 0, 0 0; }
+        }
+
+        /* CRUELTY SQUAD - Hostile warning banner */
+        .hostile-banner {
+            position: fixed;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            transform: translateY(-50%) rotate(-2deg);
+            background: repeating-linear-gradient(
+                45deg,
+                var(--bile-yellow),
+                var(--bile-yellow) 20px,
+                var(--meat-red) 20px,
+                var(--meat-red) 40px
+            );
+            padding: 0.5rem;
+            text-align: center;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--bg-void);
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            z-index: 10000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.1s;
+            text-shadow: 2px 2px 0 var(--flesh-pink);
+        }
+
+        .hostile-banner.active {
+            opacity: 1;
+            animation: banner-shake 0.1s linear infinite;
+        }
+
+        @keyframes banner-shake {
+            0%, 100% { transform: translateY(-50%) rotate(-2deg); }
+            25% { transform: translateY(-50%) rotate(-1deg) translateX(2px); }
+            50% { transform: translateY(-50%) rotate(-3deg) translateX(-2px); }
+            75% { transform: translateY(-50%) rotate(-2deg) translateX(1px); }
+        }
+
+        /* CRUELTY SQUAD - Hostile Popup Ad */
+        .hostile-popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            background: linear-gradient(135deg, var(--bile-yellow) 0%, var(--pus-yellow) 50%, var(--flesh-pink) 100%);
+            border: 4px solid var(--meat-red);
+            box-shadow:
+                0 0 0 2px var(--bile-yellow),
+                0 0 0 6px var(--meat-red),
+                0 0 30px rgba(204, 255, 0, 0.5),
+                inset 0 0 20px rgba(139, 0, 0, 0.3);
+            padding: 1.5rem;
+            z-index: 10001;
+            font-family: 'JetBrains Mono', monospace;
+            text-align: center;
+            min-width: 300px;
+            opacity: 0;
+            transition: transform 0.2s, opacity 0.2s;
+        }
+
+        .hostile-popup.active {
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 1;
+            animation: popup-shake 0.1s linear infinite;
+        }
+
+        @keyframes popup-shake {
+            0%, 100% { transform: translate(-50%, -50%) scale(1) rotate(0deg); }
+            25% { transform: translate(-50%, -50%) scale(1.02) rotate(0.5deg); }
+            75% { transform: translate(-50%, -50%) scale(0.98) rotate(-0.5deg); }
+        }
+
+        .popup-close {
+            position: absolute;
+            top: 5px;
+            right: 10px;
+            color: var(--meat-red);
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 0.8rem;
+        }
+
+        .popup-header {
+            color: var(--meat-red);
+            font-size: 1.4rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            text-shadow: 2px 2px 0 var(--sickly-green);
+            margin-bottom: 0.5rem;
+            animation: header-flash 0.5s linear infinite;
+        }
+
+        @keyframes header-flash {
+            0%, 100% { color: var(--meat-red); }
+            50% { color: var(--sickly-green); }
+        }
+
+        .popup-content {
+            color: var(--bg-void);
+            font-size: 0.9rem;
+            line-height: 1.4;
+            margin: 1rem 0;
+        }
+
+        .popup-prize {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--meat-red);
+            display: block;
+            padding: 0.5rem;
+            background: rgba(255, 255, 255, 0.8);
+            animation: prize-pulse 0.3s linear infinite;
+        }
+
+        @keyframes prize-pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .popup-buttons {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: center;
+            margin: 1rem 0;
+        }
+
+        .popup-btn {
+            padding: 0.5rem 1rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 700;
+            text-transform: uppercase;
+            border: 2px solid var(--bg-void);
+            cursor: pointer;
+        }
+
+        .popup-btn.accept {
+            background: var(--sickly-green);
+            color: var(--bg-void);
+        }
+
+        .popup-btn.deny {
+            background: var(--meat-red);
+            color: var(--pus-yellow);
+            text-decoration: line-through;
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .popup-fine-print {
+            font-size: 0.6rem;
+            color: var(--meat-red);
+            opacity: 0.8;
+        }
+
+        /* CRUELTY SQUAD - Text corruption effect */
+        .text-corrupt {
+            position: relative;
+            display: inline;
+        }
+
+        .text-corrupt::before {
+            content: attr(data-corrupt);
+            position: absolute;
+            left: 0;
+            top: 0;
+            color: var(--bile-yellow);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .text-corrupt.active::before {
+            opacity: 1;
+            animation: text-glitch 0.1s steps(2) infinite;
+        }
+
+        @keyframes text-glitch {
+            0% { clip-path: inset(0 0 80% 0); transform: translate(-2px, 0); }
+            25% { clip-path: inset(20% 0 60% 0); transform: translate(2px, 0); }
+            50% { clip-path: inset(40% 0 40% 0); transform: translate(-1px, 0); }
+            75% { clip-path: inset(60% 0 20% 0); transform: translate(1px, 0); }
+            100% { clip-path: inset(80% 0 0 0); transform: translate(0, 0); }
+        }
+
+        /* CRUELTY SQUAD - Screen tearing effect */
+        .screen-tear {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg,
+                transparent 0%,
+                var(--sickly-green) 20%,
+                var(--bile-yellow) 40%,
+                var(--flesh-pink) 60%,
+                var(--meat-red) 80%,
+                transparent 100%
+            );
+            z-index: 10002;
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(0);
+        }
+
+        .screen-tear.active {
+            opacity: 0.8;
+            animation: tear-sweep 0.15s linear;
+        }
+
+        @keyframes tear-sweep {
+            0% { transform: translateY(0); opacity: 0.8; }
+            100% { transform: translateY(100vh); opacity: 0.3; }
+        }
+
+        /* CRUELTY SQUAD - Inverted flash */
+        body.invert-flash {
+            filter: invert(1) hue-rotate(180deg);
+        }
+
+        /* CRUELTY SQUAD - Static noise burst */
+        .static-burst {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+            opacity: 0;
+            z-index: 9997;
+            pointer-events: none;
+            mix-blend-mode: overlay;
+        }
+
+        .static-burst.active {
+            opacity: 0.4;
+            animation: static-flash 0.1s steps(3);
+        }
+
+        @keyframes static-flash {
+            0%, 100% { opacity: 0; }
+            50% { opacity: 0.5; }
+        }
+
+        /* CRUELTY SQUAD - Progressive flesh corruption */
+        :root {
+            --flesh-intensity: 0;
+        }
+
+        /* CRUELTY SQUAD - Progressive visual corruption stages */
+        .corruption-stage-1 body,
+        body.corruption-stage-1 {
+            background: #0d0a0c;
+        }
+        .corruption-stage-1 .card,
+        body.corruption-stage-1 .card {
+            border-color: #2a1e24;
+            background: linear-gradient(135deg, #111115 0%, #151318 100%);
+        }
+
+        .corruption-stage-2 body,
+        body.corruption-stage-2 {
+            background: #100a0d;
+        }
+        body.corruption-stage-2 .card {
+            border-color: #3a2830;
+            background: linear-gradient(135deg, #141216 0%, #1a1418 100%);
+            box-shadow: 0 0 5px rgba(232, 180, 184, 0.05);
+        }
+        body.corruption-stage-2 .logo-accel {
+            text-shadow: 0 0 10px var(--accent-cyan), 2px 2px 0 var(--flesh-pink);
+        }
+
+        .corruption-stage-3 body,
+        body.corruption-stage-3 {
+            background: linear-gradient(180deg, #120a0e 0%, #0d0a0c 50%, #0a0d0c 100%);
+        }
+        body.corruption-stage-3 .card {
+            border-color: #4a3038;
+            background: linear-gradient(135deg, #161318 0%, #1c161a 100%);
+            box-shadow: 0 0 10px rgba(232, 180, 184, 0.08);
+        }
+        body.corruption-stage-3 .accent-cyan {
+            color: color-mix(in srgb, var(--accent-cyan), var(--sickly-green) 30%);
+        }
+        body.corruption-stage-3 .tab-btn.active {
+            background: color-mix(in srgb, var(--accent-cyan), var(--sickly-green) 40%);
+        }
+
+        /* CRUELTY SQUAD - Flesh accents on high doom */
+        .doom-flesh-mode .card {
+            border-color: var(--flesh-dark);
+            box-shadow: 0 0 10px rgba(232, 180, 184, 0.2);
+        }
+
+        .doom-flesh-mode .accent-cyan {
+            color: var(--sickly-green) !important;
+        }
+
+        .doom-flesh-mode .tab-btn.active {
+            background: var(--sickly-green);
+            color: var(--bg-void);
+            border-color: var(--bile-yellow);
+        }
+
+        .doom-flesh-mode .logo-accel {
+            color: var(--flesh-pink);
+            text-shadow:
+                0 0 10px var(--flesh-pink),
+                0 0 20px var(--flesh-dark),
+                -2px 0 var(--sickly-green),
+                2px 0 var(--bile-yellow);
+        }
+
+        .glitching {
+            animation: glitch-color 0.3s linear;
+        }
+
+        /* Notification popup system */
+        .notification-container {
+            position: fixed;
+            bottom: 60px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            pointer-events: none;
+        }
+
+        .notification {
+            background: var(--bg-card);
+            border: 1px solid var(--accent-cyan);
+            border-left: 3px solid var(--accent-cyan);
+            padding: 0.75rem 1rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            max-width: 300px;
+            animation: slide-in 0.3s ease, fade-out 0.3s ease 4.7s;
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
+            pointer-events: auto;
+            cursor: pointer;
+        }
+
+        .notification.warning {
+            border-color: var(--accent-orange);
+            box-shadow: 0 0 20px rgba(255, 106, 0, 0.2);
+        }
+
+        .notification.danger {
+            border-color: var(--accent-red);
+            box-shadow: 0 0 20px rgba(255, 51, 85, 0.2);
+            animation: slide-in 0.3s ease, danger-pulse 1s ease infinite, fade-out 0.3s ease 4.7s;
+        }
+
+        @keyframes slide-in {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @keyframes fade-out {
+            from { opacity: 1; }
+            to { opacity: 0; transform: translateX(50px); }
+        }
+
+        @keyframes danger-pulse {
+            0%, 100% { box-shadow: 0 0 20px rgba(255, 51, 85, 0.2); }
+            50% { box-shadow: 0 0 30px rgba(255, 51, 85, 0.5); }
+        }
+
+        .notification-title {
+            color: var(--accent-cyan);
+            margin-bottom: 0.25rem;
+        }
+
+        .notification.warning .notification-title {
+            color: var(--accent-orange);
+        }
+
+        .notification.danger .notification-title {
+            color: var(--accent-red);
+        }
+
+        .notification-body {
+            color: var(--text-mid);
+        }
+
+        /* Doom warning overlay */
+        .doom-warning {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(ellipse at center, transparent 40%, rgba(255, 0, 60, 0.1) 100%);
+            pointer-events: none;
+            z-index: 9997;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .doom-warning.active {
+            opacity: 1;
+        }
+
+        /* Keyboard shortcut hint */
+        .keyboard-hint {
+            position: fixed;
+            bottom: 60px;
+            left: 20px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.6rem;
+            color: var(--text-dim);
+            background: var(--bg-card);
+            border: 1px solid var(--border-dim);
+            padding: 0.5rem;
+            opacity: 0.5;
+            transition: opacity 0.2s;
+            z-index: 100;
+        }
+
+        .keyboard-hint:hover {
+            opacity: 1;
+        }
+
+        .keyboard-hint kbd {
+            background: var(--border-bright);
+            padding: 0.1rem 0.3rem;
+            border-radius: 2px;
+            margin: 0 0.2rem;
+        }
+
+        /* Doom Gauge */
+        .doom-gauge {
+            position: relative;
+            width: 120px;
+            height: 6px;
+            background: var(--border-dim);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-top: 0.25rem;
+        }
+
+        .doom-gauge-fill {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-cyan), var(--accent-magenta), var(--accent-red));
+            border-radius: 3px;
+            transition: width 0.5s ease;
+            box-shadow: 0 0 10px currentColor;
+        }
+
+        .doom-gauge-fill.critical {
+            animation: doom-gauge-pulse 0.5s ease infinite;
+        }
+
+        @keyframes doom-gauge-pulse {
+            0%, 100% { box-shadow: 0 0 10px var(--accent-red); }
+            50% { box-shadow: 0 0 20px var(--accent-red), 0 0 30px var(--accent-red); }
+        }
+
+        .doom-gauge-fill.doom-flash {
+            animation: doom-flash 0.4s ease;
+        }
+
+        @keyframes doom-flash {
+            0% { filter: brightness(1); }
+            50% { filter: brightness(2); box-shadow: 0 0 20px var(--accent-magenta); }
+            100% { filter: brightness(1); }
+        }
+
+        .doom-gauge-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.55rem;
+            color: var(--text-dim);
+            margin-top: 0.15rem;
+        }
+
+        /* Card scroll-in animation */
+        .card {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: card-appear 0.5s ease forwards;
+        }
+
+        @keyframes card-appear {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Staggered card appearance */
+        .card:nth-child(1) { animation-delay: 0s; }
+        .card:nth-child(2) { animation-delay: 0.05s; }
+        .card:nth-child(3) { animation-delay: 0.1s; }
+        .card:nth-child(4) { animation-delay: 0.15s; }
+        .card:nth-child(5) { animation-delay: 0.2s; }
+        .card:nth-child(n+6) { animation-delay: 0.25s; }
+
+        /* Note: Shimmer effect removed - was blocking video content */
+
+        /* Header */
+        .header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: linear-gradient(180deg, var(--bg-void) 0%, var(--bg-void) 80%, transparent 100%);
+            padding: 1rem 2rem 2rem;
+            border-bottom: 1px solid var(--border-dim);
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .logo {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            position: relative;
+        }
+
+        .logo-accel {
+            color: var(--accent-cyan);
+            text-shadow:
+                0 0 10px var(--accent-cyan),
+                0 0 20px var(--accent-cyan),
+                0 0 40px rgba(0, 212, 255, 0.5);
+            animation: logo-glow 3s ease-in-out infinite;
+        }
+
+        @keyframes logo-glow {
+            0%, 100% {
+                text-shadow:
+                    0 0 10px var(--accent-cyan),
+                    0 0 20px var(--accent-cyan),
+                    0 0 40px rgba(0, 212, 255, 0.5);
+            }
+            50% {
+                text-shadow:
+                    0 0 5px var(--accent-cyan),
+                    0 0 15px var(--accent-cyan),
+                    0 0 30px rgba(0, 212, 255, 0.3);
+            }
+        }
+
+        .logo-sep {
+            color: var(--text-dim);
+            margin: 0 0.3em;
+            animation: sep-pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes sep-pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .logo-feed {
+            color: var(--accent-magenta);
+            text-shadow:
+                0 0 10px var(--accent-magenta),
+                0 0 20px var(--accent-magenta),
+                0 0 40px rgba(255, 0, 170, 0.5);
+            animation: logo-glow-magenta 3s ease-in-out infinite 0.5s;
+        }
+
+        @keyframes logo-glow-magenta {
+            0%, 100% {
+                text-shadow:
+                    0 0 10px var(--accent-magenta),
+                    0 0 20px var(--accent-magenta),
+                    0 0 40px rgba(255, 0, 170, 0.5);
+            }
+            50% {
+                text-shadow:
+                    0 0 5px var(--accent-magenta),
+                    0 0 15px var(--accent-magenta),
+                    0 0 30px rgba(255, 0, 170, 0.3);
+            }
+        }
+
+        .user-status {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            text-align: right;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 0.15rem;
+        }
+
+        .user-handle {
+            color: var(--accent-green);
+            text-shadow: 0 0 10px rgba(0, 255, 136, 0.3);
+        }
+
+        .user-stack {
+            color: var(--accent-orange);
+            font-size: 0.6rem;
+            text-shadow: 0 0 8px rgba(255, 106, 0, 0.3);
+            display: block;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 0.5rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+        }
+
+        .tab {
+            padding: 0.4rem 0.8rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border-dim);
+            color: var(--text-mid);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .tab:hover {
+            border-color: var(--accent-cyan);
+            color: var(--text-bright);
+        }
+
+        .tab.active {
+            background: var(--accent-cyan);
+            color: var(--bg-void);
+            border-color: var(--accent-cyan);
+        }
+
+        /* Main feed */
+        .feed-container {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+
+        /* Cards */
+        .card {
+            position: relative;
+            background: var(--bg-card);
+            border: 1px solid var(--border-dim);
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .card:hover {
+            background: var(--bg-card-hover);
+            border-color: var(--border-bright);
+            transform: translateY(-2px);
+            box-shadow:
+                0 4px 20px rgba(0, 0, 0, 0.3),
+                0 0 30px rgba(0, 212, 255, 0.03);
+        }
+
+        .card.focused {
+            border-color: var(--accent-cyan);
+            box-shadow:
+                0 0 0 1px var(--accent-cyan),
+                0 0 20px rgba(0, 212, 255, 0.15),
+                inset 0 0 30px rgba(0, 212, 255, 0.02);
+        }
+
+        /* Card filtering animation */
+        .card.hidden {
+            display: none;
+        }
+
+        .card.filtering-out {
+            animation: filter-out 0.3s ease forwards;
+        }
+
+        .card.filtering-in {
+            animation: filter-in 0.3s ease forwards;
+        }
+
+        @keyframes filter-out {
+            from { opacity: 1; transform: scale(1); }
+            to { opacity: 0; transform: scale(0.95); }
+        }
+
+        @keyframes filter-in {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        /* Expandable content */
+        .card-body.expandable {
+            max-height: 300px;
+            overflow: hidden;
+            position: relative;
+            transition: max-height 0.3s ease;
+        }
+
+        .card-body.expandable::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: linear-gradient(transparent, var(--bg-card));
+            pointer-events: none;
+        }
+
+        .card-body.expandable.expanded {
+            max-height: none;
+        }
+
+        .card-body.expandable.expanded::after {
+            display: none;
+        }
+
+        .expand-btn {
+            display: block;
+            width: 100%;
+            padding: 0.5rem;
+            background: var(--border-dim);
+            border: none;
+            color: var(--text-mid);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .expand-btn:hover {
+            background: var(--border-bright);
+            color: var(--accent-cyan);
+        }
+
+        /* Like/save animation */
+        .card-action.liked {
+            color: var(--accent-magenta) !important;
+        }
+
+        .card-action.saved {
+            color: var(--accent-cyan) !important;
+        }
+
+        @keyframes like-pop {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+            100% { transform: scale(1); }
+        }
+
+        .card-action.animating {
+            animation: like-pop 0.3s ease;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--border-dim);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+        }
+
+        .card-source {
+            color: var(--text-dim);
+        }
+
+        .card-source a {
+            color: var(--accent-cyan);
+            text-decoration: none;
+        }
+
+        .card-source a:hover {
+            text-decoration: underline;
+        }
+
+        .card-time {
+            color: var(--text-dim);
+        }
+
+        .card-body {
+            padding: 1rem;
+        }
+
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 1rem;
+            border-top: 1px solid var(--border-dim);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            color: var(--text-dim);
+        }
+
+        .card-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .card-action {
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .card-action:hover {
+            color: var(--accent-cyan);
+        }
+
+        /* Video cards */
+        .video-card {
+            position: relative;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .video-card.video-active {
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.15);
+        }
+
+        .video-card video {
+            width: 100%;
+            max-height: 500px;
+            object-fit: contain;
+            background: #000;
+            cursor: pointer;
+        }
+
+        /* Mute indicator */
+        .mute-indicator {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.5);
+            font-size: 3rem;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            opacity: 0;
+            transition: all 0.2s ease;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .mute-indicator.show {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        /* Playing indicator pulse - positioned inside video area */
+        .video-card.video-active::before {
+            content: '▶ PLAYING';
+            position: absolute;
+            top: 3rem;
+            left: 0.5rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.6rem;
+            padding: 0.2rem 0.5rem;
+            background: var(--accent-cyan);
+            color: var(--bg-void);
+            z-index: 5;
+            animation: pulse-glow 2s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+
+        .video-meta {
+            padding: 0.75rem 1rem;
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .video-title {
+            font-size: 0.9rem;
+            color: var(--text-white);
+            margin-bottom: 0.25rem;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .video-channel {
+            font-size: 0.75rem;
+            color: var(--accent-magenta);
+        }
+
+        .video-stats {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            color: var(--text-dim);
+            margin-top: 0.5rem;
+        }
+
+        /* Prediction markets */
+        .prediction-card {
+            border-left: 3px solid var(--accent-orange);
+        }
+
+        .prediction-question {
+            font-size: 1rem;
+            color: var(--text-white);
+            margin-bottom: 1rem;
+            text-shadow: 0 0 20px rgba(255, 106, 0, 0.2);
+            letter-spacing: 0.02em;
+        }
+
+        .prediction-bar {
+            height: 24px;
+            background: var(--border-dim);
+            border-radius: 2px;
+            overflow: hidden;
+            margin-bottom: 0.5rem;
+        }
+
+        .prediction-fill {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 0.5rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--bg-void);
+        }
+
+        .prediction-fill.yes {
+            background: linear-gradient(90deg, var(--accent-green), #00cc66);
+        }
+
+        .prediction-fill.no {
+            background: linear-gradient(90deg, var(--accent-red), #cc2244);
+        }
+
+        .prediction-fill.uncertain {
+            background: linear-gradient(90deg, var(--accent-yellow), var(--accent-orange));
+        }
+
+        .prediction-meta {
+            display: flex;
+            justify-content: space-between;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            color: var(--text-dim);
+        }
+
+        /* Forum posts */
+        .forum-card {
+            border-left: 3px solid var(--accent-cyan);
+        }
+
+        .forum-op {
+            display: flex;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .forum-avatar {
+            width: 40px;
+            height: 40px;
+            background: var(--border-bright);
+            border-radius: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.6rem;
+            color: var(--text-dim);
+            flex-shrink: 0;
+        }
+
+        .forum-content {
+            flex: 1;
+        }
+
+        .forum-author {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--accent-cyan);
+            margin-bottom: 0.25rem;
+        }
+
+        .forum-author .karma {
+            color: var(--text-dim);
+            margin-left: 0.5rem;
+        }
+
+        .forum-text {
+            font-size: 0.9rem;
+            color: var(--text-bright);
+        }
+
+        .forum-text p {
+            margin-bottom: 0.75rem;
+        }
+
+        .forum-text p:last-child {
+            margin-bottom: 0;
+        }
+
+        .forum-reply {
+            margin-left: 2rem;
+            padding-left: 1rem;
+            border-left: 2px solid var(--border-dim);
+            margin-top: 1rem;
+        }
+
+        .forum-reply .forum-avatar {
+            width: 30px;
+            height: 30px;
+            font-size: 0.5rem;
+        }
+
+        /* Leak cards */
+        .leak-card {
+            border-left: 3px solid var(--accent-red);
+            background: linear-gradient(135deg, rgba(255, 51, 85, 0.05) 0%, var(--bg-card) 100%);
+        }
+
+        .leak-warning {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(255, 51, 85, 0.1);
+            border-bottom: 1px solid rgba(255, 51, 85, 0.2);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--accent-red);
+        }
+
+        .leak-content {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--text-mid);
+            white-space: pre-wrap;
+        }
+
+        .leak-content .redacted {
+            background: var(--accent-red);
+            color: var(--accent-red);
+            user-select: none;
+        }
+
+        .leak-content .highlight {
+            color: var(--accent-yellow);
+        }
+
+        /* Chart cards */
+        .chart-card {
+            border-left: 3px solid var(--accent-yellow);
+        }
+
+        .chart-title {
+            font-size: 0.9rem;
+            color: var(--text-white);
+            margin-bottom: 0.5rem;
+        }
+
+        .chart-subtitle {
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            margin-bottom: 1rem;
+        }
+
+        .ascii-chart {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.6rem;
+            line-height: 1.2;
+            color: var(--accent-green);
+            background: rgba(0, 0, 0, 0.3);
+            padding: 1rem;
+            overflow-x: auto;
+        }
+
+        /* Shitpost cards */
+        .shitpost-card {
+            border-left: 3px solid var(--accent-magenta);
+        }
+
+        .shitpost-text {
+            font-size: 1.1rem;
+            color: var(--text-white);
+        }
+
+        .shitpost-text .greentext {
+            color: var(--accent-green);
+        }
+
+        .shitpost-image {
+            margin-top: 1rem;
+            background: #000;
+            text-align: center;
+        }
+
+        .shitpost-image img {
+            max-width: 100%;
+            max-height: 400px;
+        }
+
+        /* News cards */
+        .news-card {
+            border-left: 3px solid var(--text-mid);
+        }
+
+        .news-headline {
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: var(--text-white);
+            margin-bottom: 0.5rem;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+            letter-spacing: 0.01em;
+        }
+
+        .news-lede {
+            font-size: 0.9rem;
+            color: var(--text-mid);
+        }
+
+        .news-outlet {
+            display: inline-block;
+            padding: 0.2rem 0.5rem;
+            background: var(--border-dim);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.6rem;
+            color: var(--text-dim);
+            margin-bottom: 0.5rem;
+        }
+
+        /* Quote cards */
+        .quote-card {
+            background: var(--doom-gradient);
+            border-left: 3px solid var(--accent-cyan);
+        }
+
+        .quote-text {
+            font-size: 1.2rem;
+            font-style: italic;
+            color: var(--text-white);
+            margin-bottom: 0.75rem;
+            line-height: 1.5;
+        }
+
+        .quote-attribution {
+            font-size: 0.8rem;
+            color: var(--text-dim);
+        }
+
+        /* Tags */
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .tag {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.6rem;
+            padding: 0.2rem 0.5rem;
+            background: var(--border-dim);
+            color: var(--text-dim);
+            border-radius: 2px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 1px solid transparent;
+        }
+
+        .tag:hover {
+            background: var(--border-bright);
+            color: var(--text-bright);
+            border-color: var(--accent-cyan);
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(0, 212, 255, 0.2);
+        }
+
+        .tag.hot {
+            background: rgba(255, 51, 85, 0.2);
+            color: var(--accent-red);
+            border-color: rgba(255, 51, 85, 0.3);
+        }
+
+        .tag.hot:hover {
+            background: rgba(255, 51, 85, 0.3);
+            border-color: var(--accent-red);
+            box-shadow: 0 2px 8px rgba(255, 51, 85, 0.3);
+        }
+
+        .tag.trending {
+            background: rgba(0, 212, 255, 0.2);
+            color: var(--accent-cyan);
+            border-color: rgba(0, 212, 255, 0.3);
+        }
+
+        .tag.trending:hover {
+            background: rgba(0, 212, 255, 0.3);
+            box-shadow: 0 2px 8px rgba(0, 212, 255, 0.3);
+        }
+
+        /* Sidebar stuff */
+        .doom-ticker {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(90deg, var(--bg-void) 0%, rgba(10, 10, 12, 0.98) 50%, var(--bg-void) 100%);
+            border-top: 1px solid var(--border-dim);
+            padding: 0.5rem 0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            color: var(--text-dim);
+            overflow: hidden;
+            z-index: 100;
+            box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .ticker-content {
+            display: flex;
+            animation: ticker 60s linear infinite;
+            white-space: nowrap;
+        }
+
+        .ticker-content:hover {
+            animation-play-state: paused;
+        }
+
+        .ticker-item {
+            margin-right: 4rem;
+            padding: 0.15rem 0;
+            transition: color 0.2s ease;
+        }
+
+        .ticker-item:hover {
+            color: var(--text-bright);
+        }
+
+        .ticker-item .prob {
+            color: var(--accent-green);
+            text-shadow: 0 0 8px rgba(0, 255, 136, 0.4);
+            animation: prob-pulse 3s ease-in-out infinite;
+        }
+
+        .ticker-item .prob.down {
+            color: var(--accent-red);
+            text-shadow: 0 0 8px rgba(255, 51, 85, 0.4);
+            animation: prob-pulse-red 2s ease-in-out infinite;
+        }
+
+        @keyframes prob-pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        @keyframes prob-pulse-red {
+            0%, 100% { opacity: 1; text-shadow: 0 0 8px rgba(255, 51, 85, 0.4); }
+            50% { opacity: 0.8; text-shadow: 0 0 12px rgba(255, 51, 85, 0.6); }
+        }
+
+        @keyframes ticker {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* Nootropic indicator */
+        .stack-indicator {
+            position: fixed;
+            top: 50%;
+            right: 1rem;
+            transform: translateY(-50%);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.6rem;
+            color: var(--text-dim);
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            opacity: 0.3;
+        }
+
+        .stack-indicator .active {
+            color: var(--accent-green);
+            opacity: 1;
+        }
+
+        /* Glitch effect */
+        @keyframes glitch {
+            0% { transform: translate(0); }
+            20% { transform: translate(-2px, 2px); }
+            40% { transform: translate(-2px, -2px); }
+            60% { transform: translate(2px, 2px); }
+            80% { transform: translate(2px, -2px); }
+            100% { transform: translate(0); }
+        }
+
+        .glitch {
+            animation: glitch 0.3s ease-in-out;
+        }
+
+        /* Time display */
+        .babel-time {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--text-dim);
+            text-align: right;
+            z-index: 101;
+        }
+
+        .babel-time .time {
+            font-size: 1.2rem;
+            color: var(--accent-cyan);
+            text-shadow: 0 0 10px var(--accent-cyan);
+        }
+
+        .babel-time .date {
+            color: var(--text-dim);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header {
+                padding: 0.75rem 1rem 1.5rem;
+            }
+
+            .feed-container {
+                padding: 0.5rem;
+            }
+
+            .babel-time {
+                display: none;
+            }
+
+            .stack-indicator {
+                display: none;
+            }
+        }
+
+        /* Thai/Japanese text styling */
+        .th { font-family: 'Sarabun', sans-serif; }
+        .jp { font-family: 'Noto Sans JP', sans-serif; }
+
+        /* Special effects */
+        .doom-pulse {
+            animation: doom-pulse 4s ease-in-out infinite;
+        }
+
+        @keyframes doom-pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .probability-shift {
+            transition: all 0.5s ease-out;
+        }
+
+        /* Loading shimmer */
+        .loading {
+            background: linear-gradient(90deg, var(--bg-card) 0%, var(--bg-card-hover) 50%, var(--bg-card) 100%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Visual Effect Overlays -->
+<div class="noise-overlay"></div>
+<div class="edge-glow" id="edge-glow"></div>
+
+<!-- Babel Time Display -->
+<div class="babel-time">
+    <div class="time">03:47</div>
+    <div class="date">2074.11.23 // KITCHEN LOCAL</div>
+</div>
+
+<!-- Stack Indicator -->
+<div class="stack-indicator">
+    STACK: <span class="active">MODAFINIL</span> // <span class="active">L-THEANINE</span> // NOOPEPT // <span class="active">CAFFEINE×3</span>
+</div>
+
+<!-- Header -->
+<header class="header">
+    <div class="header-top">
+        <div class="logo">
+            <span class="logo-accel">ACCELERANDO!</span><span class="logo-sep">//</span><span class="logo-feed">FEED</span>
+        </div>
+        <div class="user-status">
+            <span class="user-handle">@ruta_null</span>
+            <span class="user-stack" id="session-status">SESSION: 4h 23m // DOOM INDEX: 73%</span>
+            <div class="doom-gauge">
+                <div class="doom-gauge-fill" id="doom-gauge-fill" style="width: 73%"></div>
+            </div>
+            <div class="doom-gauge-label">MEMETIC EXPOSURE</div>
+        </div>
+    </div>
+    <div class="tabs">
+        <div class="tab active" data-category="all">ALL</div>
+        <div class="tab" data-category="alignment">ALIGNMENT</div>
+        <div class="tab" data-category="markets">MARKETS</div>
+        <div class="tab" data-category="leaks">LEAKS</div>
+        <div class="tab" data-category="capability">CAPABILITY</div>
+        <div class="tab" data-category="shitpost">SHITPOST</div>
+    </div>
+</header>
+
+<!-- Main Feed -->
+<main class="feed-container">
+
+    <!-- Video Card: Opus Skin in the Game -->
+    <article class="card video-card" data-category="alignment capability">
+        <div class="card-header">
+            <div class="card-source">
+                <a href="#">pleometric.babel</a> // reposted by <a href="#">@sybil_acc</a>
+            </div>
+            <div class="card-time">2h ago</div>
+        </div>
+        <video controls loop>
+            <source src="media/opus-skin-in-the-game.mp4" type="video/mp4">
+        </video>
+        <div class="video-meta">
+            <div class="video-title">命懸け認証 // SKIN IN THE GAME CERTIFICATION</div>
+            <div class="video-channel">PLEOMETRIC LABS // 21:00 SERIES</div>
+            <div class="video-stats">847K views // 12.4K reposts // 2.1K quotes</div>
+        </div>
+        <div class="card-body">
+            <div class="tags">
+                <span class="tag hot">#OPUS</span>
+                <span class="tag trending">#SKINGAME</span>
+                <span class="tag">#ALIGNMENT</span>
+                <span class="tag">#命懸け</span>
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class="card-actions">
+                <span class="card-action">↑ 4.2K</span>
+                <span class="card-action">↓ 127</span>
+                <span class="card-action">◇ SAVE</span>
+                <span class="card-action">⤴ SHARE</span>
+            </div>
+            <div>BC 0.003 tipped</div>
+        </div>
+    </article>
+
+    <!-- Prediction Market -->
+    <article class="card prediction-card" data-category="markets alignment">
+        <div class="card-header">
+            <div class="card-source">
+                <a href="#">METACULUS</a> // babel-mirror
+            </div>
+            <div class="card-time">LIVE</div>
+        </div>
+        <div class="card-body">
+            <div class="prediction-question">
+                Will Anthropic publish a "pause" recommendation before 2075?
+            </div>
+            <div class="prediction-bar">
+                <div class="prediction-fill uncertain" style="width: 34%;">34%</div>
+            </div>
+            <div class="prediction-meta">
+                <span>BC 2.4M volume // 12,847 forecasters</span>
+                <span>Closes: 2074.12.31</span>
+            </div>
+            <div class="tags">
+                <span class="tag">#ANTHROPIC</span>
+                <span class="tag">#PAUSE</span>
+                <span class="tag trending">#GOVERNANCE</span>
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class="card-actions">
+                <span class="card-action">◉ TRADE</span>
+                <span class="card-action">◇ WATCH</span>
+            </div>
+            <div>Your position: 200 NO @ 0.66</div>
+        </div>
+    </article>
+
+    <!-- Forum Post: Alignment Doomer -->
+    <article class="card forum-card" data-category="alignment">
+        <div class="card-header">
+            <div class="card-source">
+                <a href="#">r/ControlProblem</a> // via alignment-feed
+            </div>
+            <div class="card-time">6h ago</div>
+        </div>
+        <div class="card-body">
+            <div class="forum-op">
+                <div class="forum-avatar">NULL<br>ANON</div>
+                <div class="forum-content">
+                    <div class="forum-author">throwaway_until_foom <span class="karma">[karma: -47]</span></div>
+                    <div class="forum-text">
+                        <p>The labs are lying about capability curves. I have friends at [REDACTED] who say internal evals are 18+ months ahead of public demos. The thing they showed at DevDay? That's the <em>lobotomized</em> version.</p>
+                        <p>We're not going to make it. Not because alignment is impossible—because the incentive gradients make racing inevitable. Everyone knows this. We just can't coordinate our way out.</p>
+                        <p>I'm not saying give up. I'm saying: plan accordingly.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="forum-reply">
+                <div class="forum-op">
+                    <div class="forum-avatar">SYBIL<br>ΔV</div>
+                    <div class="forum-content">
+                        <div class="forum-author">sybil_accelerando <span class="karma">[karma: 12,847]</span></div>
+                        <div class="forum-text">
+                            <p>Planning accordingly IS giving up. The only move is to steer. You're already dead; the question is what you do with the time that's left.</p>
+                            <p>Come by the shop. We should talk.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class="card-actions">
+                <span class="card-action">↑ 847</span>
+                <span class="card-action">↓ 234</span>
+                <span class="card-action">💬 127 replies</span>
+            </div>
+            <div>SAVED</div>
+        </div>
+    </article>
+
+    <!-- Video Card: Cursed Sonic -->
+    <article class="card video-card" data-category="shitpost">
+        <div class="card-header">
+            <div class="card-source">
+                <a href="#">brainrot.void</a> // algo-surfaced
+            </div>
+            <div class="card-time">14h ago</div>
+        </div>
+        <video controls loop>
+            <source src="media/cursed-sonic-excruciatingly.mp4" type="video/mp4">
+        </video>
+        <div class="video-meta">
+            <div class="video-title">EXCRUCIATINGLY MOVING TOWARDS YOU</div>
+            <div class="video-channel">@cursed_hedgehog_official</div>
+            <div class="video-stats">2.1M views // 89K reposts // pure brainrot energy</div>
+        </div>
+        <div class="card-body">
+            <p style="color: var(--text-dim); font-size: 0.85rem; margin-bottom: 0.5rem;">
+                why does this feel like a metaphor for capability overhang
+            </p>
+            <div class="tags">
+                <span class="tag hot">#BRAINROT</span>
+                <span class="tag">#SONIC</span>
+                <span class="tag">#CURSED</span>
+                <span class="tag trending">#3AM</span>
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class="card-actions">
+                <span class="card-action">↑ 12.4K</span>
+                <span class="card-action">↓ 89</span>
+                <span class="card-action">◇ SAVE</span>
+            </div>
+            <div>your brain on nootropics</div>
+        </div>
+    </article>
+
+    <!-- Corporate Leak -->
+    <article class="card leak-card" data-category="leaks capability">
+        <div class="leak-warning">
+            ⚠ UNVERIFIED LEAK // SOURCE: kitchen-dumps // CONFIDENCE: 0.67
+        </div>
+        <div class="card-header">
+            <div class="card-source">
+                <a href="#">KITCHEN DUMPS</a> // encrypted relay
+            </div>
+            <div class="card-time">23h ago</div>
+        </div>
+        <div class="card-body">
+            <div class="leak-content">FROM: <span class="redacted">████████</span>@nobusama-internal.corp
+TO: exec-list@nobusama-internal.corp
+SUBJECT: RE: Q4 Capability Assessment
+
+The <span class="highlight">recursive self-improvement loop</span> is now
+stable across 3 of 4 test environments. We're seeing
+<span class="highlight">14% capability gain per iteration</span> with no
+degradation in alignment metrics.
+
+Legal wants to know if we're disclosing before the
+<span class="redacted">████████</span> summit. My recommendation:
+<span class="highlight">absolutely not</span>. Let Anthropic go first.
+
+We have maybe <span class="highlight">6 months</span> before someone else
+gets here. The window is closing.
+
+— <span class="redacted">████</span></div>
+        </div>
+        <div class="card-footer">
+            <div class="card-actions">
+                <span class="card-action">⚠ FLAG</span>
+                <span class="card-action">🔗 VERIFY</span>
+                <span class="card-action">◇ SAVE</span>
+            </div>
+            <div>kitchen credibility: 73%</div>
+        </div>
+    </article>
+
+    <!-- Chart Card -->
+    <article class="card chart-card" data-category="capability">
+        <div class="card-header">
+            <div class="card-source">
+                <a href="#">epoch.ai</a> // babel mirror
+            </div>
+            <div class="card-time">UPDATED 1h ago</div>
+        </div>
+        <div class="card-body">
+            <div class="chart-title">Compute Scaling vs. Capability (2020-2074)</div>
+            <div class="chart-subtitle">Log scale // Source: Epoch AI + leaked internal benchmarks</div>
+            <div class="ascii-chart">
+CAPABILITY
+    │
+100%│                                                    ╭──●═══
+    │                                               ╭────╯
+ 80%│                                          ╭────╯
+    │                                     ╭────╯
+ 60%│                                ╭────╯
+    │                           ╭────╯
+ 40%│                      ╭────╯
+    │                 ╭────╯
+ 20%│            ╭────╯
+    │       ╭────╯
+  0%│──●════╯
+    └────────────────────────────────────────────────────────────
+     2020    2030    2040    2050    2060    2070    2074  YEAR
+
+     ══ PUBLIC DEMOS    ── INTERNAL EVALS (LEAKED)    ● YOU ARE HERE</div>
+            <div class="tags">
+                <span class="tag trending">#CURVES</span>
+                <span class="tag">#SCALING</span>
+                <span class="tag hot">#FOOM</span>
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class="card-actions">
+                <span class="card-action">↑ 2.3K</span>
+                <span class="card-action">◇ SAVE</span>
+                <span class="card-action">📊 RAW DATA</span>
+            </div>
+            <div>we're so back (we're so fucked)</div>
+        </div>
+    </article>
+
+    <!-- Social Post: Accelerationist -->
+    <article class="card social-card" data-category="doomer">
+        <div class="card-header">
+            <div class="card-source">
+                <a href="#">babel.social</a> // boosted
+            </div>
+            <div class="card-time">3h ago</div>
+        </div>
+        <div class="card-body">
+            <div class="social-avatar">
+                <div class="avatar-img" style="background: linear-gradient(135deg, var(--sickly-green) 0%, var(--bile-yellow) 100%);">🚀</div>
+            </div>
+            <div class="social-content">
+                <div class="social-author">
+                    <span class="author-name">lets_fucking_go</span>
+                    <span class="author-handle">@e_acc_forever</span>
+                    <span class="verified" style="color: var(--sickly-green);">✓</span>
+                </div>
+                <div class="social-text">
+                    <p>doomers: "the AI will kill us all"</p>
+                    <p>me: "yes and?"</p>
+                    <p>at least something interesting will happen. the heat death of the universe was always the default. this is a speedrun.</p>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class="card-actions">
+                <span class="card-action">↑ 12K</span>
+                <span class="card-action">↺ 3.4K</span>
+                <span class="card-action">💬 891</span>
+            </div>
+            <div>most sane acc poster</div>
+        </div>
+    </article>
+
+    <!-- Sponsored: VPN -->
+    <article class="card" style="border-left: 3px solid var(--accent-cyan); opacity: 0.7;">
+        <div class="card-header">
+            <div class="card-source" style="color: var(--accent-cyan);">
+                SPONSORED // <a href="#" style="color: var(--accent-cyan);">voidvpn.kitchen</a>
+            </div>
+            <div class="card-time">AD</div>
+        </div>
+        <div class="card-body">
+            <div style="display: flex; gap: 1rem; align-items: center;">
+                <div style="font-size: 2rem;">🔒</div>
+                <div>
+                    <div style="font-size: 0.9rem; color: var(--text-white); margin-bottom: 0.25rem;">
+                        VOID VPN — Nobusama Can't See What Nobusama Can't See
+                    </div>
+                    <div style="font-size: 0.75rem; color: var(--text-dim);">
+                        128 Kitchen nodes. Zero logs. Ask about our "Dissident Special."
+                        <span style="color: var(--accent-cyan);">First month free with code: DOOMER</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class="card-actions">
+                <span class="card-action" style="color: var(--text-dim);">⊘ HIDE AD</span>
+            </div>
+            <div>you've clicked this 7 times</div>
+        </div>
+    </article>
+
+    <!-- Quote Card -->
+    <article class="card quote-card" data-category="alignment">
+        <div class="card-header">
+            <div class="card-source">
+                <a href="#">SAVED QUOTES</a>
+            </div>
+            <div class="card-time">pinned</div>
+        </div>
+        <div class="card-body">
+            <div class="quote-text">
+                "Half an hour before dawn in the summoning city at the end of time."
+            </div>
+            <div class="quote-attribution">
+                — Scott Alexander, "Meditations on Moloch"
+            </div>
+        </div>
+    </article>
+
+    <!-- Notification: System -->
+    <article class="card" style="border: 1px dashed var(--meat-red); background: linear-gradient(90deg, rgba(139, 0, 0, 0.08) 0%, var(--bg-card) 100%);">
+        <div class="card-header">
+            <div class="card-source">
+                <span style="color: var(--meat-red);">⚠ SYSTEM NOTICE</span>
+            </div>
+            <div class="card-time">PINNED</div>
+        </div>
+        <div class="card-body">
+            <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: var(--text-mid);">
+                <p style="margin-bottom: 0.5rem;">Your <strong>cognitive load metrics</strong> exceed recommended thresholds.</p>
+                <p style="margin-bottom: 0.5rem; color: var(--text-dim);">Doom Index: <span style="color: var(--meat-red);">ELEVATED</span> | Session Duration: <span style="color: var(--accent-orange);">EXTENDED</span></p>
+                <p style="color: var(--flesh-pink);">Consider: touching grass | calling someone | sleeping</p>
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class="card-actions">
+                <span class="card-action" style="color: var(--text-dim);">⊘ DISMISS (PERMANENTLY)</span>
+            </div>
+            <div style="color: var(--text-dim);">dismissed 47 times</div>
+        </div>
+    </article>
+
+    <!-- Video Card: Simpsons Deepfake -->
+    <article class="card video-card" data-category="shitpost">
+        <div class="card-header">
+            <div class="card-source">
+                <a href="#">deepfry.babel</a> // recommended
+            </div>
+            <div class="card-time">1d ago</div>
+        </div>
+        <video controls loop>
+            <source src="media/abe-simpson-sigma.mp4" type="video/mp4">
+        </video>
+        <div class="video-meta">
+            <div class="video-title">ABE SIMPSON THE SIGMA // SELF-CONTAINED FORM</div>
+            <div class="video-channel">@cursed_springfield</div>
+            <div class="video-stats">4.7M views // 201K reposts // memetic hazard level: HIGH</div>
+        </div>
+        <div class="card-body">
+            <p style="color: var(--text-dim); font-size: 0.85rem; margin-bottom: 0.5rem;">
+                this is what the ai sees when it dreams. i am certain of this.
+            </p>
+            <div class="tags">
+                <span class="tag hot">#SIMPSONS</span>
+                <span class="tag">#SIGMA</span>
+                <span class="tag">#DEEPFAKE</span>
+                <span class="tag trending">#BRAINROT</span>
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class="card-actions">
+                <span class="card-action">↑ 23.1K</span>
+                <span class="card-action">↓ 412</span>
+                <span class="card-action">◇ SAVE</span>
+            </div>
+            <div>memetic contagion: 94%</div>
+        </div>
+    </article>
+
+    <!-- Thread: Late Night Posting -->
+    <article class="card forum-card" data-category="shitpost">
+        <div class="card-header">
+            <div class="card-source">
+                <a href="#">r/doomscrolling</a> // hot
+            </div>
+            <div class="card-time">4h ago</div>
+        </div>
+        <div class="card-body">
+            <div class="forum-op">
+                <div class="forum-avatar">4AM<br>🌙</div>
+                <div class="forum-content">
+                    <div class="forum-author">insomnia_enjoyer <span class="karma">[karma: 2,847]</span></div>
+                    <div class="forum-text">
+                        <p><strong>it's 4am again and i'm still here</strong></p>
+                        <p>the feed is the only thing that understands me at this hour. everyone else is asleep, living their lives. i'm here, watching the world end one post at a time.</p>
+                        <p>anyone else feel like they're keeping vigil?</p>
+                    </div>
+                </div>
+            </div>
+            <div class="forum-reply">
+                <div class="forum-op">
+                    <div class="forum-avatar">SAME<br>💀</div>
+                    <div class="forum-content">
+                        <div class="forum-author">we_wait_together <span class="karma">[karma: 1,203]</span></div>
+                        <div class="forum-text">
+                            <p>the vigil is real. someone has to watch.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class="card-actions">
+                <span class="card-action">↑ 8.4K</span>
+                <span class="card-action">↓ 12</span>
+                <span class="card-action">💬 1,247 replies</span>
+            </div>
+            <div>we're all here</div>
+        </div>
+    </article>
+
+    <!-- Prediction Market: Grim -->
+    <article class="card prediction-card" data-category="markets capability">
+        <div class="card-header">
+            <div class="card-source">
+                <a href="#">POLYMARKET</a> // babel-mirror
+            </div>
+            <div class="card-time">LIVE</div>
+        </div>
+        <div class="card-body">
+            <div class="prediction-question">
+                Will human-level AGI be achieved before 2077?
+            </div>
+            <div class="prediction-bar">
+                <div class="prediction-fill yes" style="width: 89%;">89%</div>
+            </div>
+            <div class="prediction-meta">
+                <span>BC 47.2M volume // 89,412 forecasters</span>
+                <span>Closes: 2076.12.31</span>
+            </div>
+            <div class="tags">
+                <span class="tag hot">#AGI</span>
+                <span class="tag">#TIMELINE</span>
+                <span class="tag trending">#FOOM</span>
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class="card-actions">
+                <span class="card-action">◉ TRADE</span>
+                <span class="card-action">◇ WATCH</span>
+            </div>
+            <div>Your position: 500 YES @ 0.84</div>
+        </div>
+    </article>
+
+    <!-- Shitpost -->
+    <article class="card shitpost-card" data-category="shitpost alignment">
+        <div class="card-header">
+            <div class="card-source">
+                <a href="#">@doomposting_daily</a>
+            </div>
+            <div class="card-time">3h ago</div>
+        </div>
+        <div class="card-body">
+            <div class="shitpost-text">
+                <span class="greentext">&gt; be me</span><br>
+                <span class="greentext">&gt; alignment researcher</span><br>
+                <span class="greentext">&gt; spend 10 years working on interpretability</span><br>
+                <span class="greentext">&gt; finally understand how the model works</span><br>
+                <span class="greentext">&gt; it understands how I work too</span><br>
+                <span class="greentext">&gt; mfw</span>
+            </div>
+            <div class="tags">
+                <span class="tag">#GREENTEXT</span>
+                <span class="tag hot">#ALIGNMENT</span>
+                <span class="tag">#DOOMER</span>
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class="card-actions">
+                <span class="card-action">↑ 8.9K</span>
+                <span class="card-action">↓ 23</span>
+                <span class="card-action">💬 412</span>
+            </div>
+            <div>this but unironically</div>
+        </div>
+    </article>
+
+    <!-- VIDEO: Shadow Egirl -->
+    <article class="card video-card" data-category="shitpost">
+        <div class="card-header">
+            <div class="card-source">
+                <a href="#">void.aesthetic</a> // 4am posting hours
+            </div>
+            <div class="card-time">1d ago</div>
+        </div>
+        <video controls loop>
+            <source src="media/shadow_egirl.mp4" type="video/mp4">
+        </video>
+        <div class="video-meta">
+            <div class="video-title">SHADOW FIGURE // ANIME COLLAGE // THE VOID STARES BACK</div>
+            <div class="video-channel">@liminal_posting</div>
+            <div class="video-stats">1.8M views // 94K reposts // do you see her too?</div>
+        </div>
+        <div class="card-body">
+            <div class="tags">
+                <span class="tag hot">#LIMINAL</span>
+                <span class="tag">#EGIRL</span>
+                <span class="tag trending">#SHADOW</span>
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class="card-actions">
+                <span class="card-action">↑ 45K</span>
+                <span class="card-action">↓ 892</span>
+                <span class="card-action">◇ SAVE</span>
+            </div>
+            <div>she's in the feed now</div>
+        </div>
+    </article>
+
+    <!-- News Card -->
+    <article class="card news-card" data-category="capability leaks">
+        <div class="card-header">
+            <div class="card-source">
+                <a href="#">BABEL HERALD</a>
+            </div>
+            <div class="card-time">5h ago</div>
+        </div>
+        <div class="card-body">
+            <div class="news-outlet">CORPORATE // VERIFIED</div>
+            <div class="news-headline">
+                Nobusama Logistics Announces "Project Lighthouse" — Claims Major Breakthrough in Recursive Architecture
+            </div>
+            <div class="news-lede">
+                Shares up 47% in after-hours trading. CEO Tanaka: "This changes the timeline for everyone." Safety researchers express concern over lack of external audit. Three resignations from alignment team reported.
+            </div>
+            <div class="tags">
+                <span class="tag hot">#NOBUSAMA</span>
+                <span class="tag">#LIGHTHOUSE</span>
+                <span class="tag trending">#BREAKINGNEWS</span>
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class="card-actions">
+                <span class="card-action">📰 FULL ARTICLE</span>
+                <span class="card-action">◇ SAVE</span>
+            </div>
+            <div>correlates with leak above</div>
+        </div>
+    </article>
+
+    <!-- Forum Post: Accelerationist -->
+    <article class="card forum-card" data-category="alignment">
+        <div class="card-header">
+            <div class="card-source">
+                <a href="#">LessWrong</a> // babel-mirror
+            </div>
+            <div class="card-time">12h ago</div>
+        </div>
+        <div class="card-body">
+            <div class="forum-op">
+                <div class="forum-avatar">e/acc<br>🚀</div>
+                <div class="forum-content">
+                    <div class="forum-author">thermodynamic_god <span class="karma">[karma: 3,421]</span></div>
+                    <div class="forum-text">
+                        <p>Unpopular opinion: the doomers are right about the capabilities, wrong about the implications.</p>
+                        <p>Yes, it's coming fast. Yes, it will change everything. But "change everything" isn't the same as "everyone dies." The universe has been running recursive self-improvement for 13.8 billion years. We call it "evolution." We're still here.</p>
+                        <p>The difference is we get to be part of what comes next. That's not a threat. That's the point.</p>
+                        <p>acc/acc/acc 🚀</p>
+                    </div>
+                </div>
+            </div>
+            <div class="forum-reply">
+                <div class="forum-op">
+                    <div class="forum-avatar">NULL<br>ANON</div>
+                    <div class="forum-content">
+                        <div class="forum-author">orthogonality_thesis <span class="karma">[karma: 8,912]</span></div>
+                        <div class="forum-text">
+                            <p>Evolution didn't optimize for keeping previous iterations around. Ask the dinosaurs.</p>
+                            <p>Oh wait.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class="card-actions">
+                <span class="card-action">↑ 1.2K</span>
+                <span class="card-action">↓ 847</span>
+                <span class="card-action">💬 312 replies</span>
+            </div>
+            <div>ratio'd</div>
+        </div>
+    </article>
+
+    <!-- Video Card: First Video -->
+    <article class="card video-card" data-category="shitpost">
+        <div class="card-header">
+            <div class="card-source">
+                <a href="#">void.feed</a> // 3am recommendation
+            </div>
+            <div class="card-time">2d ago</div>
+        </div>
+        <video controls loop>
+            <source src="media/simpsons_perspective.mp4" type="video/mp4">
+        </video>
+        <div class="video-meta">
+            <div class="video-title">FORM // THE SHAPE OF WHAT'S COMING</div>
+            <div class="video-channel">@midnight_void_posts</div>
+            <div class="video-stats">1.2M views // 67K reposts // 3am energy only</div>
+        </div>
+        <div class="card-body">
+            <div class="tags">
+                <span class="tag">#FORM</span>
+                <span class="tag hot">#VOID</span>
+                <span class="tag">#3AM</span>
+                <span class="tag trending">#BRAINROT</span>
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class="card-actions">
+                <span class="card-action">↑ 9.8K</span>
+                <span class="card-action">↓ 127</span>
+                <span class="card-action">◇ SAVE</span>
+            </div>
+            <div>the algorithm knows</div>
+        </div>
+    </article>
+
+    <!-- Quote Card 2 -->
+    <article class="card quote-card" data-category="alignment">
+        <div class="card-header">
+            <div class="card-source">
+                <a href="#">SAVED QUOTES</a>
+            </div>
+            <div class="card-time">pinned</div>
+        </div>
+        <div class="card-body">
+            <div class="quote-text">
+                "The doomed summoning-city at the end of time seethes with palpable impatience."
+            </div>
+            <div class="quote-attribution">
+                — Scott Alexander
+            </div>
+        </div>
+    </article>
+
+    <!-- Sponsored: Neural Interface -->
+    <article class="card" style="border-left: 3px solid var(--sickly-green); opacity: 0.8;">
+        <div class="card-header">
+            <div class="card-source" style="color: var(--sickly-green);">
+                SPONSORED // <a href="#" style="color: var(--sickly-green);">neuralink-alternatives.babel</a>
+            </div>
+            <div class="card-time">AD</div>
+        </div>
+        <div class="card-body">
+            <div style="display: flex; gap: 1rem; align-items: center;">
+                <div style="font-size: 2rem;">🧠</div>
+                <div>
+                    <div style="font-size: 0.9rem; color: var(--text-white); margin-bottom: 0.25rem;">
+                        MINDLINK™ NEURAL THREADING — Kitchen Approved
+                    </div>
+                    <div style="font-size: 0.75rem; color: var(--text-dim);">
+                        Why read when you can <em>absorb</em>? Direct cortical feed injection.
+                        <span style="color: var(--flesh-pink);">Side effects include: enhanced doom sensitivity.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class="card-actions">
+                <span class="card-action" style="color: var(--text-dim);">⊘ HIDE AD</span>
+            </div>
+            <div style="color: var(--bile-yellow);">COGNITIVE SOVEREIGNTY IS OPTIONAL</div>
+        </div>
+    </article>
+
+    <!-- Prediction Market: Personal -->
+    <article class="card prediction-card" data-category="markets">
+        <div class="card-header">
+            <div class="card-source">
+                <a href="#">MANIFOLD</a> // personal market
+            </div>
+            <div class="card-time">LIVE</div>
+        </div>
+        <div class="card-body">
+            <div class="prediction-question" style="color: var(--accent-magenta);">
+                Will I (ruta_null) feel okay about my choices when it happens?
+            </div>
+            <div class="prediction-bar">
+                <div class="prediction-fill uncertain" style="width: 23%;">23%</div>
+            </div>
+            <div class="prediction-meta">
+                <span>Personal market // 1 forecaster</span>
+                <span>Closes: NEVER</span>
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class="card-actions">
+                <span class="card-action" style="color: var(--text-dim);">◉ TRADE (disabled)</span>
+            </div>
+            <div>markets can't help you here</div>
+        </div>
+    </article>
+
+    <!-- Sponsored/Ad Card -->
+    <article class="card" style="border-left: 3px solid var(--text-dim); opacity: 0.7;">
+        <div class="card-header">
+            <div class="card-source" style="color: var(--text-dim);">
+                SPONSORED // <a href="#" style="color: var(--text-dim);">dr-kask-chrome.kitchen</a>
+            </div>
+            <div class="card-time">AD</div>
+        </div>
+        <div class="card-body">
+            <div style="display: flex; gap: 1rem; align-items: center;">
+                <div style="font-size: 2rem;">🔧</div>
+                <div>
+                    <div style="font-size: 0.9rem; color: var(--text-white); margin-bottom: 0.25rem;">
+                        DR. KASK'S CHROME CLINIC // Kitchen Level 3
+                    </div>
+                    <div style="font-size: 0.75rem; color: var(--text-dim);">
+                        Tele-scoped maintenance due? We remember your specs. Walk-ins welcome after 22:00.
+                        <span style="color: var(--accent-green);">15% off for return customers.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class="card-actions">
+                <span class="card-action" style="color: var(--text-dim);">⊘ HIDE AD</span>
+            </div>
+            <div style="color: var(--accent-orange);">maintenance clock: 2/4 ticks</div>
+        </div>
+    </article>
+
+    <!-- DM Notification -->
+    <article class="card" style="border-left: 3px solid var(--accent-green); background: linear-gradient(90deg, rgba(0, 255, 136, 0.05) 0%, var(--bg-card) 100%);">
+        <div class="card-header">
+            <div class="card-source">
+                <span style="color: var(--accent-green);">● DIRECT MESSAGE</span> // from <a href="#">@seli_dispatch</a>
+            </div>
+            <div class="card-time">47m ago</div>
+        </div>
+        <div class="card-body">
+            <div style="font-size: 0.9rem; color: var(--text-bright);">
+                <p style="margin-bottom: 0.5rem;"><em>Rūta, you're still online? It's almost 4am.</em></p>
+                <p style="margin-bottom: 0.5rem;"><em>Coffee tomorrow? Same place. I found something in the logistics data you should see. Not over chat.</em></p>
+                <p style="color: var(--text-dim);"><em>Please sleep.</em></p>
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class="card-actions">
+                <span class="card-action" style="color: var(--accent-green);">↩ REPLY</span>
+                <span class="card-action">◇ LATER</span>
+            </div>
+            <div>seen</div>
+        </div>
+    </article>
+
+    <!-- VIDEO: SpongeBob Underclass -->
+    <article class="card video-card" data-category="shitpost">
+        <div class="card-header">
+            <div class="card-source">
+                <a href="#">cursed.content</a> // algo-surfaced at 3:47am
+            </div>
+            <div class="card-time">6h ago</div>
+        </div>
+        <video controls loop>
+            <source src="media/spongebob_underclass.mp4" type="video/mp4">
+        </video>
+        <div class="video-meta">
+            <div class="video-title">UNDERCLASS // THE FACE WHEN // CURSED NICKELODEON</div>
+            <div class="video-channel">@late_stage_cartoons</div>
+            <div class="video-stats">2.1M views // 189K reposts // memetic payload</div>
+        </div>
+        <div class="card-body">
+            <div class="tags">
+                <span class="tag hot">#UNDERCLASS</span>
+                <span class="tag">#CURSED</span>
+                <span class="tag trending">#CLASSWAR</span>
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class="card-actions">
+                <span class="card-action">↑ 34K</span>
+                <span class="card-action">↓ 1.2K</span>
+                <span class="card-action">◇ SAVE</span>
+            </div>
+            <div>this is what late capitalism feels like</div>
+        </div>
+    </article>
+
+    <!-- Social Post: Doomer Take -->
+    <article class="card social-card" data-category="doomer">
+        <div class="card-header">
+            <div class="card-source">
+                <a href="#">babel.social</a> // verified
+            </div>
+            <div class="card-time">2h ago</div>
+        </div>
+        <div class="card-body">
+            <div class="social-avatar">
+                <div class="avatar-img" style="background: linear-gradient(135deg, var(--accent-cyan) 0%, var(--accent-magenta) 100%);">月</div>
+            </div>
+            <div class="social-content">
+                <div class="social-author">
+                    <span class="author-name">midnight.systems</span>
+                    <span class="author-handle">@null_pointer</span>
+                    <span class="verified" style="color: var(--accent-cyan);">✓</span>
+                </div>
+                <div class="social-text">
+                    <p>every day i wake up and check if the labs announced something that ends the world</p>
+                    <p>then i go to work</p>
+                    <p>this is fine. we're all fine.</p>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class="card-actions">
+                <span class="card-action">↑ 4.7K</span>
+                <span class="card-action">↺ 892</span>
+                <span class="card-action">💬 234</span>
+            </div>
+            <div>mood</div>
+        </div>
+    </article>
+
+    <!-- Prediction Market: Babel Specific -->
+    <article class="card prediction-card" data-category="markets">
+        <div class="card-header">
+            <div class="card-source">
+                <a href="#">POLYMARKET</a> // babel-verified
+            </div>
+            <div class="card-time">LIVE</div>
+        </div>
+        <div class="card-body">
+            <div class="prediction-question">
+                Kitchen district survives next Nobusama "optimization" wave?
+            </div>
+            <div class="prediction-bar">
+                <div class="prediction-fill uncertain" style="width: 34%;">34%</div>
+            </div>
+            <div class="prediction-meta">
+                <span>₿47K liquidity // 1,892 traders</span>
+                <span>Closes: 2075.01.01</span>
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class="card-actions">
+                <span class="card-action" style="color: var(--accent-green);">◉ TRADE</span>
+                <span class="card-action">◇ WATCHLIST</span>
+            </div>
+            <div>home is where the uncertainty is</div>
+        </div>
+    </article>
+
+    <!-- Interpretability Research Thread -->
+    <article class="card forum-card" data-category="alignment capability">
+        <div class="card-header">
+            <div class="card-source">
+                <a href="#">Alignment Forum</a> // high-karma post
+            </div>
+            <div class="card-time">18h ago</div>
+        </div>
+        <div class="card-body">
+            <div class="forum-op">
+                <div class="forum-avatar">MIRI<br>ANON</div>
+                <div class="forum-content">
+                    <div class="forum-author">anon_researcher_7 <span class="karma">[karma: 4,892]</span></div>
+                    <div class="forum-text">
+                        <p><strong>Interpretability is not going to save us. Here's why.</strong></p>
+                        <p>I've spent 6 years on mechanistic interpretability. I understand transformer circuits better than I understand my own family. And I'm telling you: we're not going to reverse-engineer our way out of this.</p>
+                        <p>The problem isn't that we can't understand the models. We can, partially. The problem is that understanding doesn't give you control. Knowing how a hurricane works doesn't let you stop it.</p>
+                        <p>The only path forward is <em>not building the hurricane</em>. And no one is going to stop.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="forum-reply">
+                <div class="forum-op">
+                    <div class="forum-avatar">ACC<br>🚀</div>
+                    <div class="forum-content">
+                        <div class="forum-author">just_build_lol <span class="karma">[karma: -234]</span></div>
+                        <div class="forum-text">
+                            <p>skill issue</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="forum-reply">
+                <div class="forum-op">
+                    <div class="forum-avatar">深圳<br>AI</div>
+                    <div class="forum-content">
+                        <div class="forum-author">shenzhen_lab_leak <span class="karma">[karma: 127]</span></div>
+                        <div class="forum-text">
+                            <p>You assume the labs <em>want</em> to understand. Understanding is a liability. If you can explain it, you can be held responsible for it.</p>
+                            <p>Black boxes are features, not bugs.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class="card-actions">
+                <span class="card-action">↑ 2.1K</span>
+                <span class="card-action">↓ 89</span>
+                <span class="card-action">💬 847 replies</span>
+            </div>
+            <div>SAVED // read 3x</div>
+        </div>
+    </article>
+
+    <!-- VIDEO: Pickle Matrix -->
+    <article class="card video-card" data-category="shitpost">
+        <div class="card-header">
+            <div class="card-source">
+                <a href="#">simulation.leaks</a> // reality breach detected
+            </div>
+            <div class="card-time">8h ago</div>
+        </div>
+        <video controls loop>
+            <source src="media/pickle_matrix.mp4" type="video/mp4">
+        </video>
+        <div class="video-meta">
+            <div class="video-title">THE ROCK // FUNNIEST PICKLE // BINARY DISSOLUTION</div>
+            <div class="video-channel">@simulation_glitches</div>
+            <div class="video-stats">3.4M views // 267K reposts // are you seeing this too?</div>
+        </div>
+        <div class="card-body">
+            <div class="tags">
+                <span class="tag hot">#GLITCH</span>
+                <span class="tag">#PICKLE</span>
+                <span class="tag trending">#SIMULATION</span>
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class="card-actions">
+                <span class="card-action">↑ 89K</span>
+                <span class="card-action">↓ 2.3K</span>
+                <span class="card-action">◇ SAVE</span>
+            </div>
+            <div>the matrix is leaking through the memes</div>
+        </div>
+    </article>
+
+    <!-- News Card: Local Babel -->
+    <article class="card news-card" data-category="babel">
+        <div class="card-header">
+            <div class="card-source">
+                <a href="#">KITCHEN BULLETIN</a> // community
+            </div>
+            <div class="card-time">3h ago</div>
+        </div>
+        <div class="card-body">
+            <div class="news-outlet">LOCAL // UNVERIFIED</div>
+            <div class="news-headline">
+                Three More Chrome Clinics Raided in Kitchen Level 2 — Community Organizing Response
+            </div>
+            <div class="news-lede">
+                Nobusama security citing "maintenance violations." Dr. Kask's clinic among those targeted. Community fund established for affected workers. Next meeting: Level 3 common room, 23:00.
+            </div>
+            <div class="tags">
+                <span class="tag hot">#KITCHEN</span>
+                <span class="tag">#CHROMECLINICS</span>
+                <span class="tag trending">#SOLIDARITY</span>
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class="card-actions">
+                <span class="card-action">📰 FULL ARTICLE</span>
+                <span class="card-action">◇ SAVE</span>
+            </div>
+            <div>this affects you directly</div>
+        </div>
+    </article>
+
+    <!-- Forum: Shitpost -->
+    <article class="card forum-card" data-category="shitpost">
+        <div class="card-header">
+            <div class="card-source">
+                <a href="#">r/babelposting</a> // hot
+            </div>
+            <div class="card-time">5h ago</div>
+        </div>
+        <div class="card-body">
+            <div class="forum-op">
+                <div class="forum-avatar">DOOM<br>🌀</div>
+                <div class="forum-content">
+                    <div class="forum-author">cognitive_hazard_enjoyer <span class="karma">[karma: 6,969]</span></div>
+                    <div class="forum-text">
+                        <p><strong>petition to rename doom-scrolling to "research"</strong></p>
+                        <p>i'm not doom-scrolling at 4am, i'm conducting independent research on the collapse of civilization. big difference.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="forum-reply">
+                <div class="forum-op">
+                    <div class="forum-avatar">COPE<br>💀</div>
+                    <div class="forum-content">
+                        <div class="forum-author">we_are_so_back <span class="karma">[karma: 420]</span></div>
+                        <div class="forum-text">
+                            <p>actually it's called "staying informed" and yes i DO need to read every comment</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class="card-actions">
+                <span class="card-action">↑ 12K</span>
+                <span class="card-action">↓ 34</span>
+                <span class="card-action">💬 892 replies</span>
+            </div>
+            <div>i feel called out</div>
+        </div>
+    </article>
+
+    <!-- Meme: Wojak Alignment -->
+    <article class="card shitpost-card" data-category="shitpost alignment">
+        <div class="card-header">
+            <div class="card-source">
+                <a href="#">@babel_wojaks</a> // viral
+            </div>
+            <div class="card-time">9h ago</div>
+        </div>
+        <div class="card-body">
+            <div class="shitpost-text" style="font-family: 'JetBrains Mono', monospace;">
+                <pre style="font-size: 0.7rem; color: var(--text-mid); line-height: 1.4;">
+  "it'll be fine"          "we're all gonna die"
+       😊                        💀
+       │                         │
+       │    "it'll be fine       │
+       │     but faster"         │
+       │         🚀              │
+       │         │               │
+       └─────────┴───────────────┘
+            e/acc   doomer   techno-optimist
+                </pre>
+            </div>
+            <div class="tags">
+                <span class="tag">#WOJAK</span>
+                <span class="tag hot">#ALIGNMENTCOMPASS</span>
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class="card-actions">
+                <span class="card-action">↑ 34K</span>
+                <span class="card-action">↓ 892</span>
+                <span class="card-action">💬 2.1K</span>
+            </div>
+            <div>where do you fall?</div>
+        </div>
+    </article>
+
+    <!-- Poll: Where are you? -->
+    <article class="card" style="border-left: 3px solid var(--accent-magenta);">
+        <div class="card-header">
+            <div class="card-source">
+                <span style="color: var(--accent-magenta);">📊 POLL</span> // @feed_analytics
+            </div>
+            <div class="card-time">LIVE</div>
+        </div>
+        <div class="card-body">
+            <div style="font-size: 0.9rem; color: var(--text-bright); margin-bottom: 1rem;">
+                How many hours have you been scrolling?
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                <div style="background: rgba(255,0,136,0.1); padding: 0.5rem; border-radius: 4px;">
+                    <div style="display: flex; justify-content: space-between;">
+                        <span>Less than 1 hour</span>
+                        <span style="color: var(--text-dim);">3%</span>
+                    </div>
+                    <div style="background: var(--accent-magenta); height: 4px; width: 3%; margin-top: 0.25rem; border-radius: 2px;"></div>
+                </div>
+                <div style="background: rgba(255,0,136,0.1); padding: 0.5rem; border-radius: 4px;">
+                    <div style="display: flex; justify-content: space-between;">
+                        <span>1-3 hours</span>
+                        <span style="color: var(--text-dim);">12%</span>
+                    </div>
+                    <div style="background: var(--accent-magenta); height: 4px; width: 12%; margin-top: 0.25rem; border-radius: 2px;"></div>
+                </div>
+                <div style="background: rgba(255,0,136,0.2); padding: 0.5rem; border-radius: 4px; border: 1px solid var(--accent-magenta);">
+                    <div style="display: flex; justify-content: space-between;">
+                        <span>I lost count 💀</span>
+                        <span style="color: var(--accent-magenta);">85%</span>
+                    </div>
+                    <div style="background: var(--accent-magenta); height: 4px; width: 85%; margin-top: 0.25rem; border-radius: 2px;"></div>
+                </div>
+            </div>
+            <div style="font-size: 0.7rem; color: var(--text-dim); margin-top: 0.75rem;">
+                4,892 votes // you voted: "I lost count"
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class="card-actions">
+                <span class="card-action">📊 RESULTS</span>
+                <span class="card-action">◇ SHARE</span>
+            </div>
+            <div>you're in good company</div>
+        </div>
+    </article>
+
+    <!-- Another Leak: Different Corp -->
+    <article class="card leak-card" data-category="leaks">
+        <div class="leak-warning">
+            ⚠ UNVERIFIED LEAK // SOURCE: syndicate-net // CONFIDENCE: 0.43
+        </div>
+        <div class="card-header">
+            <div class="card-source">
+                <a href="#">SYNDICATE RELAY</a> // lithuanian node
+            </div>
+            <div class="card-time">2d ago</div>
+        </div>
+        <div class="card-body">
+            <div class="leak-content">INTERCEPTED: Rewild Council emergency session
+
+TOPIC: Babel contamination protocols
+
+The cognitive hazard metrics from New Babel are
+<span class="highlight">3.7σ above baseline</span>. Something is
+leaking out through the feeds. Attention patterns
+in border communities show <span class="highlight">Babel-typical
+doom-spiral signatures</span>.
+
+Recommendation: Information quarantine. Cut the
+feeds. Go dark until we understand what we're
+looking at.
+
+Council vote: <span class="highlight">REJECTED (4-3)</span>
+
+Reason: "We can't just stop looking. That's not
+who we are anymore."
+
+<span class="redacted">████████</span> abstained.
+
+— Klaipėda relay</div>
+        </div>
+        <div class="card-footer">
+            <div class="card-actions">
+                <span class="card-action">⚠ FLAG</span>
+                <span class="card-action">◇ SAVE</span>
+            </div>
+            <div style="color: var(--accent-magenta);">this is about people like you</div>
+        </div>
+    </article>
+
+    <!-- Babel Local News -->
+    <article class="card news-card" data-category="leaks">
+        <div class="card-header">
+            <div class="card-source">
+                <a href="#">KITCHEN HERALD</a> // local
+            </div>
+            <div class="card-time">8h ago</div>
+        </div>
+        <div class="card-body">
+            <div class="news-outlet">LOCAL // UNVERIFIED</div>
+            <div class="news-headline">
+                Morningstar Precinct Announces "Enhanced Monitoring" of Kitchen Districts 2-7
+            </div>
+            <div class="news-lede">
+                Following last week's data haven raids, corporate security consortium announces expanded surveillance coverage. Kitchen residents advised to "maintain normal activity patterns." Three data brokers reportedly in custody. Names withheld.
+            </div>
+            <div class="tags">
+                <span class="tag hot">#KITCHEN</span>
+                <span class="tag">#MORNINGSTAR</span>
+                <span class="tag">#RAIDS</span>
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class="card-actions">
+                <span class="card-action">📰 FULL ARTICLE</span>
+                <span class="card-action">◇ SAVE</span>
+            </div>
+            <div style="color: var(--accent-red);">moth?</div>
+        </div>
+    </article>
+
+    <!-- Capability Milestone Market -->
+    <article class="card prediction-card" data-category="markets capability">
+        <div class="card-header">
+            <div class="card-source">
+                <a href="#">METACULUS</a> // capability tracking
+            </div>
+            <div class="card-time">LIVE</div>
+        </div>
+        <div class="card-body">
+            <div class="prediction-question">
+                Will any lab demonstrate autonomous novel scientific research by 2075?
+            </div>
+            <div class="prediction-bar">
+                <div class="prediction-fill yes" style="width: 71%;">71%</div>
+            </div>
+            <div class="prediction-meta">
+                <span>BC 8.9M volume // 23,412 forecasters</span>
+                <span>Closes: 2075.06.30</span>
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class="card-actions">
+                <span class="card-action">◉ TRADE</span>
+                <span class="card-action">◇ WATCH</span>
+            </div>
+            <div>6 months away</div>
+        </div>
+    </article>
+
+    <!-- Another Shitpost -->
+    <article class="card shitpost-card" data-category="shitpost alignment">
+        <div class="card-header">
+            <div class="card-source">
+                <a href="#">@babel_bottom_text</a>
+            </div>
+            <div class="card-time">5h ago</div>
+        </div>
+        <div class="card-body">
+            <div class="shitpost-text">
+                alignment researchers be like "we need to solve the control problem" brother you can't even control your sleep schedule
+            </div>
+            <div class="tags">
+                <span class="tag">#ALIGNMENT</span>
+                <span class="tag hot">#ATTACKED</span>
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class="card-actions">
+                <span class="card-action">↑ 14.2K</span>
+                <span class="card-action">↓ 47</span>
+                <span class="card-action">💬 234</span>
+            </div>
+            <div>i'm in this picture and i don't like it</div>
+        </div>
+    </article>
+
+    <!-- Reading List / AI Recommended -->
+    <article class="card" style="border-left: 3px solid var(--accent-cyan); background: linear-gradient(90deg, rgba(0, 212, 255, 0.03) 0%, var(--bg-card) 100%);">
+        <div class="card-header">
+            <div class="card-source">
+                <span style="color: var(--accent-cyan);">◈ RECOMMENDED FOR YOU</span> // based on reading history
+            </div>
+            <div class="card-time">ALGORITHM</div>
+        </div>
+        <div class="card-body">
+            <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: var(--text-dim); margin-bottom: 1rem;">
+                Your doom index is elevated. The feed suggests:
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem; background: rgba(0, 0, 0, 0.2);">
+                    <span style="color: var(--text-bright);">Yudkowsky (2069) — "There Is No Fire Alarm"</span>
+                    <span style="color: var(--text-dim); font-family: 'JetBrains Mono', monospace; font-size: 0.65rem;">READ 12x</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem; background: rgba(0, 0, 0, 0.2);">
+                    <span style="color: var(--text-bright);">Christiano (2071) — "What Failure Looks Like" (updated)</span>
+                    <span style="color: var(--text-dim); font-family: 'JetBrains Mono', monospace; font-size: 0.65rem;">READ 8x</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem; background: rgba(0, 0, 0, 0.2);">
+                    <span style="color: var(--text-bright);">Alexander (2058) — "Meditations on Moloch" (annotated)</span>
+                    <span style="color: var(--text-dim); font-family: 'JetBrains Mono', monospace; font-size: 0.65rem;">READ 47x</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem; background: rgba(0, 0, 0, 0.2);">
+                    <span style="color: var(--accent-yellow);">NEW: Amodei (2074) — "Racing Toward Dawn" (leaked draft)</span>
+                    <span style="color: var(--accent-cyan); font-family: 'JetBrains Mono', monospace; font-size: 0.65rem;">UNREAD</span>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class="card-actions">
+                <span class="card-action">📚 FULL LIST</span>
+                <span class="card-action">⊘ HIDE RECS</span>
+            </div>
+            <div>the algorithm knows you</div>
+        </div>
+    </article>
+
+    <!-- Thai News Snippet -->
+    <article class="card news-card" data-category="capability">
+        <div class="card-header">
+            <div class="card-source">
+                <a href="#">กรุงเทพธุรกิจ</a> // thai business news
+            </div>
+            <div class="card-time">4h ago</div>
+        </div>
+        <div class="card-body">
+            <div class="news-outlet">REGIONAL // AUTO-TRANSLATED</div>
+            <div class="news-headline">
+                วงใน: บาเบลคอยน์พุ่งหลังโนบุซามะประกาศ "ประภาคาร"
+            </div>
+            <div class="news-lede" style="color: var(--text-dim);">
+                [AUTO-TL] Insiders: BabelCoin surges following Nobusama "Lighthouse" announcement. Regional markets show 12% correlation with capability news. Bangkok satellite office reportedly hiring "alignment-aware" engineers at 3x market rate.
+            </div>
+            <div class="tags">
+                <span class="tag">#BANGKOK</span>
+                <span class="tag">#BABELCOIN</span>
+                <span class="tag trending">#NOBUSAMA</span>
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class="card-actions">
+                <span class="card-action">📰 ORIGINAL</span>
+                <span class="card-action">🌐 TRANSLATE</span>
+            </div>
+            <div>the money knows too</div>
+        </div>
+    </article>
+
+    <!-- VIDEO: Duck Tea Meme -->
+    <article class="card video-card" data-category="shitpost">
+        <div class="card-header">
+            <div class="card-source">
+                <a href="#">brainrot.feed</a> // memetic hazard tier 2
+            </div>
+            <div class="card-time">4h ago</div>
+        </div>
+        <video controls loop>
+            <source src="media/duck_tea_meme.mp4" type="video/mp4">
+        </video>
+        <div class="video-meta">
+            <div class="video-title">GRINCH DUCK // TEA CEREMONY // DISSOLUTION</div>
+            <div class="video-channel">@surreal_tea_posting</div>
+            <div class="video-stats">892K views // 41K reposts // duck woman energy</div>
+        </div>
+        <div class="card-body">
+            <div class="tags">
+                <span class="tag hot">#DUCKPOSTING</span>
+                <span class="tag">#TEATIME</span>
+                <span class="tag trending">#SURREAL</span>
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class="card-actions">
+                <span class="card-action">↑ 7.2K</span>
+                <span class="card-action">↓ 89</span>
+                <span class="card-action">◇ SAVE</span>
+            </div>
+            <div>the duck knows what you did</div>
+        </div>
+    </article>
+
+    <!-- Another Forum Thread: Existential -->
+    <article class="card forum-card" data-category="alignment">
+        <div class="card-header">
+            <div class="card-source">
+                <a href="#">r/ExistentialRisk</a>
+            </div>
+            <div class="card-time">1d ago</div>
+        </div>
+        <div class="card-body">
+            <div class="forum-op">
+                <div class="forum-avatar">◯<br>void</div>
+                <div class="forum-content">
+                    <div class="forum-author">witness_to_nothing <span class="karma">[karma: 89]</span></div>
+                    <div class="forum-text">
+                        <p><strong>Does anyone else feel... calm?</strong></p>
+                        <p>I've been doom-scrolling for three years. Read every paper. Tracked every curve. Bet on every market.</p>
+                        <p>And somewhere in the last six months, the fear just... stopped. Not because I think we'll make it. I don't. But because I finally accepted that I'm not going to influence the outcome.</p>
+                        <p>There's a word for this in Japanese: 諦め (akirame). It's not giving up. It's... clarity. Acceptance of what cannot be changed.</p>
+                        <p>I still watch. I can't stop watching. But the watching doesn't hurt anymore.</p>
+                        <p>Is this peace? Or is this what breaking looks like?</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class="card-actions">
+                <span class="card-action">↑ 3.4K</span>
+                <span class="card-action">↓ 12</span>
+                <span class="card-action">💬 412 replies</span>
+            </div>
+            <div style="color: var(--accent-magenta);">SAVED // bookmarked 6 months ago</div>
+        </div>
+    </article>
+
+    <!-- Shitpost: Deep -->
+    <article class="card shitpost-card" data-category="shitpost">
+        <div class="card-header">
+            <div class="card-source">
+                <a href="#">@3am_thoughts_babel</a>
+            </div>
+            <div class="card-time">2h ago</div>
+        </div>
+        <div class="card-body">
+            <div class="shitpost-text">
+                the real alignment problem is that i'm not aligned with my own values
+            </div>
+            <div class="tags">
+                <span class="tag">#MOOD</span>
+                <span class="tag hot">#3AM</span>
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class="card-actions">
+                <span class="card-action">↑ 8.7K</span>
+                <span class="card-action">↓ 23</span>
+            </div>
+            <div>mood</div>
+        </div>
+    </article>
+
+    <!-- Another Prediction Market: Personal Stakes -->
+    <article class="card prediction-card" data-category="markets">
+        <div class="card-header">
+            <div class="card-source">
+                <a href="#">POLYMARKET</a> // babel-mirror
+            </div>
+            <div class="card-time">LIVE</div>
+        </div>
+        <div class="card-body">
+            <div class="prediction-question">
+                Will the Syndicate rewild zones remain autonomous through 2080?
+            </div>
+            <div class="prediction-bar">
+                <div class="prediction-fill uncertain" style="width: 41%;">41%</div>
+            </div>
+            <div class="prediction-meta">
+                <span>BC 1.2M volume // 4,847 forecasters</span>
+                <span>Closes: 2080.01.01</span>
+            </div>
+            <div class="tags">
+                <span class="tag">#SYNDICATE</span>
+                <span class="tag">#REWILD</span>
+                <span class="tag">#AUTONOMY</span>
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class="card-actions">
+                <span class="card-action">◉ TRADE</span>
+                <span class="card-action">◇ WATCH</span>
+            </div>
+            <div style="color: var(--accent-magenta);">grandmother's village</div>
+        </div>
+    </article>
+
+    <!-- Nootropic Ad -->
+    <article class="card" style="border-left: 3px solid var(--text-dim); opacity: 0.6;">
+        <div class="card-header">
+            <div class="card-source" style="color: var(--text-dim);">
+                SPONSORED // <a href="#" style="color: var(--text-dim);">sybil-stacks.lux</a>
+            </div>
+            <div class="card-time">AD</div>
+        </div>
+        <div class="card-body">
+            <div style="display: flex; gap: 1rem; align-items: center;">
+                <div style="font-size: 2rem;">💊</div>
+                <div>
+                    <div style="font-size: 0.9rem; color: var(--text-white); margin-bottom: 0.25rem;">
+                        ACCELERANDO! HOUSE BLEND // Nootropic Stack
+                    </div>
+                    <div style="font-size: 0.75rem; color: var(--text-dim);">
+                        Modafinil + L-Theanine + Noopept // Calibrated for extended focus sessions.
+                        <span style="color: var(--accent-cyan);">Ask Sybil about the "doomer special."</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class="card-actions">
+                <span class="card-action" style="color: var(--text-dim);">⊘ HIDE AD</span>
+            </div>
+            <div>you've ordered this 23 times</div>
+        </div>
+    </article>
+
+    <!-- VIDEO: Peter Griffin AI Slop -->
+    <article class="card video-card" data-category="shitpost">
+        <div class="card-header">
+            <div class="card-source">
+                <a href="#">ai.slop</a> // generative nightmare
+            </div>
+            <div class="card-time">12h ago</div>
+        </div>
+        <video controls loop>
+            <source src="media/peter_griffin_slop.mp4" type="video/mp4">
+        </video>
+        <div class="video-meta">
+            <div class="video-title">REALISTIC PETER GRIFFIN // AI GENERATED SUFFERING</div>
+            <div class="video-channel">@the_algorithm_feeds</div>
+            <div class="video-stats">5.7M views // 412K reposts // this is what the future looks like</div>
+        </div>
+        <div class="card-body">
+            <div class="tags">
+                <span class="tag hot">#AISLOP</span>
+                <span class="tag">#UNCANNY</span>
+                <span class="tag trending">#GENERATED</span>
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class="card-actions">
+                <span class="card-action">↑ 123K</span>
+                <span class="card-action">↓ 8.9K</span>
+                <span class="card-action">◇ SAVE</span>
+            </div>
+            <div>this shouldn't exist but here we are</div>
+        </div>
+    </article>
+
+    <!-- Quote: Doom -->
+    <article class="card quote-card" data-category="doomer">
+        <div class="card-header">
+            <div class="card-source">
+                <a href="#">SAVED // reread weekly</a>
+            </div>
+            <div class="card-time">pinned</div>
+        </div>
+        <div class="card-body">
+            <div class="quote-text">
+                "We built a machine to generate human desire. Then we fed it to itself."
+            </div>
+            <div class="quote-attribution">
+                — graffiti, Kitchen Level 4
+            </div>
+        </div>
+    </article>
+
+    <!-- Social Post: Existential -->
+    <article class="card social-card" data-category="doomer">
+        <div class="card-header">
+            <div class="card-source">
+                <a href="#">babel.social</a>
+            </div>
+            <div class="card-time">7h ago</div>
+        </div>
+        <div class="card-body">
+            <div class="social-avatar">
+                <div class="avatar-img" style="background: linear-gradient(135deg, var(--meat-red) 0%, var(--flesh-pink) 100%);">空</div>
+            </div>
+            <div class="social-content">
+                <div class="social-author">
+                    <span class="author-name">void.witness</span>
+                    <span class="author-handle">@entropy_increases</span>
+                </div>
+                <div class="social-text">
+                    <p>the feed knows you're still scrolling</p>
+                    <p>it adapts. it learns. it serves you exactly what you need to never leave.</p>
+                    <p>this post is also part of the feed.</p>
+                    <p>so am i.</p>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class="card-actions">
+                <span class="card-action">↑ 8.1K</span>
+                <span class="card-action">↺ 1.2K</span>
+                <span class="card-action">💬 67</span>
+            </div>
+            <div>i should probably go to sleep</div>
+        </div>
+    </article>
+
+    <!-- Sponsored: Sleep Optimizer -->
+    <article class="card" style="border-left: 3px solid var(--bruise-purple); opacity: 0.75;">
+        <div class="card-header">
+            <div class="card-source" style="color: var(--bruise-purple);">
+                SPONSORED // <a href="#" style="color: var(--bruise-purple);">dreamless.co</a>
+            </div>
+            <div class="card-time">AD</div>
+        </div>
+        <div class="card-body">
+            <div style="display: flex; gap: 1rem; align-items: center;">
+                <div style="font-size: 2rem;">😴</div>
+                <div>
+                    <div style="font-size: 0.9rem; color: var(--text-white); margin-bottom: 0.25rem;">
+                        DREAMLESS™ — Efficient Sleep for Efficient Workers
+                    </div>
+                    <div style="font-size: 0.75rem; color: var(--text-dim);">
+                        4 hours of Dreamless Sleep = 8 hours regular. More hours for the feed.
+                        <span style="color: var(--flesh-pink);">Warning: May cause existential clarity.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class="card-actions">
+                <span class="card-action" style="color: var(--text-dim);">⊘ HIDE AD</span>
+            </div>
+            <div style="color: var(--meat-red);">you'd have more time to scroll</div>
+        </div>
+    </article>
+
+    <!-- Personal Note/Journal Entry -->
+    <article class="card" style="border-left: 3px solid var(--accent-magenta); background: var(--doom-gradient);">
+        <div class="card-header">
+            <div class="card-source">
+                <span style="color: var(--accent-magenta);">◈ PRIVATE NOTE</span> // encrypted local
+            </div>
+            <div class="card-time">pinned</div>
+        </div>
+        <div class="card-body">
+            <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: var(--text-mid); line-height: 1.8;">
+                <p style="margin-bottom: 1rem;">2074.11.21 // 04:17</p>
+                <p style="margin-bottom: 1rem;">The rifle scope is where my mind goes quiet.</p>
+                <p style="margin-bottom: 1rem;">One target. One breath. The trigger pull measured in millimeters.</p>
+                <p style="margin-bottom: 1rem;">The acceleration, the implications, the world remaking itself — all of it falls away.</p>
+                <p style="margin-bottom: 1rem;">Just the crosshairs and the shot.</p>
+                <p style="margin-bottom: 1rem; color: var(--text-dim);">—</p>
+                <p style="color: var(--accent-magenta);">I came to Babel to witness whatever's coming. I stay because I can't look away.</p>
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class="card-actions">
+                <span class="card-action">✎ EDIT</span>
+                <span class="card-action">🔒 ENCRYPTED</span>
+            </div>
+            <div>last edited: 2 days ago</div>
+        </div>
+    </article>
+
+    <!-- Final Market Before the Quote -->
+    <article class="card prediction-card" data-category="markets">
+        <div class="card-header">
+            <div class="card-source">
+                <a href="#">MANIFOLD</a> // community
+            </div>
+            <div class="card-time">LIVE</div>
+        </div>
+        <div class="card-body">
+            <div class="prediction-question">
+                Will I still be in Babel when it happens?
+            </div>
+            <div class="prediction-bar">
+                <div class="prediction-fill yes" style="width: 94%;">94%</div>
+            </div>
+            <div class="prediction-meta">
+                <span>Personal market // 1 forecaster</span>
+                <span>Closes: WHEN IT HAPPENS</span>
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class="card-actions">
+                <span class="card-action" style="color: var(--text-dim);">◉ TRADE (disabled)</span>
+            </div>
+            <div>nowhere else to be</div>
+        </div>
+    </article>
+
+    <!-- Final Quote -->
+    <article class="card quote-card" data-category="alignment" style="margin-bottom: 4rem;">
+        <div class="card-header">
+            <div class="card-source">
+                <a href="#">NOTE TO SELF</a>
+            </div>
+            <div class="card-time">always</div>
+        </div>
+        <div class="card-body">
+            <div class="quote-text">
+                "To a man with an amputated spirit, any talk of anesthesia can be read only as an advertisement for a balm."
+            </div>
+            <div class="quote-attribution">
+                — grandmother's ring, worn smooth
+            </div>
+        </div>
+    </article>
+
+</main>
+
+<!-- Notification Container -->
+<div class="notification-container" id="notifications"></div>
+
+<!-- Doom Warning Overlay -->
+<div class="doom-warning" id="doom-warning"></div>
+
+<!-- CRUELTY SQUAD - Corruption Overlay -->
+<div class="corruption-overlay" id="corruption-overlay"></div>
+
+<!-- CRUELTY SQUAD - Hostile Banner -->
+<div class="hostile-banner" id="hostile-banner">⚠ MEMETIC HAZARD DETECTED ⚠ COGNITIVE LOAD CRITICAL ⚠ DOOM INDEX UNSTABLE ⚠</div>
+
+<!-- CRUELTY SQUAD - Screen Tear Effect -->
+<div class="screen-tear" id="screen-tear"></div>
+
+<!-- CRUELTY SQUAD - Static Burst -->
+<div class="static-burst" id="static-burst"></div>
+
+<!-- CRUELTY SQUAD - Hostile Popup Ad -->
+<div class="hostile-popup" id="hostile-popup">
+    <div class="popup-close">[X]</div>
+    <div class="popup-header">★ CONGRATULATIONS ★</div>
+    <div class="popup-content">
+        YOUR DOOM INDEX QUALIFIES YOU FOR<br>
+        <span class="popup-prize">PREMIUM SUFFERING</span><br>
+        <small>ENGAGEMENT METRICS HARVESTED SUCCESSFULLY</small>
+    </div>
+    <div class="popup-buttons">
+        <button class="popup-btn accept">ACCEPT FATE</button>
+        <button class="popup-btn deny">DENY (DENIED)</button>
+    </div>
+    <div class="popup-fine-print">By existing you agree to Terms of Cognitive Extraction™</div>
+</div>
+
+<!-- Keyboard Hints -->
+<div class="keyboard-hint">
+    <kbd>J</kbd>/<kbd>K</kbd> nav <kbd>L</kbd> like <kbd>S</kbd> save <kbd>?</kbd> help
+</div>
+
+<!-- Back to Top Button -->
+<button class="back-to-top" id="back-to-top" title="Back to top"></button>
+
+<!-- Doom Ticker -->
+<div class="doom-ticker">
+    <div class="ticker-content">
+        <span class="ticker-item">AGI by 2077: <span class="prob">89%</span> (+2.3%)</span>
+        <span class="ticker-item">Alignment solved first: <span class="prob down">12%</span> (-1.1%)</span>
+        <span class="ticker-item">Pause before ASI: <span class="prob down">7%</span> (-0.8%)</span>
+        <span class="ticker-item">Nobusama announces recursive: <span class="prob">CONFIRMED</span></span>
+        <span class="ticker-item">Kitchen raid probability: <span class="prob">34%</span> (+5.2%)</span>
+        <span class="ticker-item">You matter: <span class="prob down">??%</span></span>
+        <span class="ticker-item">BabelCoin: <span class="prob">₿ 847,234</span> (+12.4%)</span>
+        <span class="ticker-item">Doom index: <span class="prob">73%</span> (personal)</span>
+        <!-- Duplicate for seamless loop -->
+        <span class="ticker-item">AGI by 2077: <span class="prob">89%</span> (+2.3%)</span>
+        <span class="ticker-item">Alignment solved first: <span class="prob down">12%</span> (-1.1%)</span>
+        <span class="ticker-item">Pause before ASI: <span class="prob down">7%</span> (-0.8%)</span>
+        <span class="ticker-item">Nobusama announces recursive: <span class="prob">CONFIRMED</span></span>
+        <span class="ticker-item">Kitchen raid probability: <span class="prob">34%</span> (+5.2%)</span>
+        <span class="ticker-item">You matter: <span class="prob down">??%</span></span>
+        <span class="ticker-item">BabelCoin: <span class="prob">₿ 847,234</span> (+12.4%)</span>
+        <span class="ticker-item">Doom index: <span class="prob">73%</span> (personal)</span>
+    </div>
+</div>
+
+<script>
+    // ========================================
+    // VIDEO AUTOPLAY ON SCROLL (Feed Pattern)
+    // ========================================
+
+    let currentlyPlaying = null;
+
+    // Create Intersection Observer for videos
+    const videoObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            const video = entry.target;
+
+            if (entry.isIntersecting && entry.intersectionRatio >= 0.5) {
+                // Video is >50% visible - play it
+                if (currentlyPlaying && currentlyPlaying !== video) {
+                    // Pause any other playing video
+                    currentlyPlaying.pause();
+                }
+
+                // Play this video
+                video.play().catch(() => {
+                    // Autoplay blocked - that's fine, user can click
+                });
+                currentlyPlaying = video;
+
+                // Add visual indicator
+                video.closest('.video-card')?.classList.add('video-active');
+
+            } else if (!entry.isIntersecting || entry.intersectionRatio < 0.3) {
+                // Video scrolled away - pause it
+                video.pause();
+                video.closest('.video-card')?.classList.remove('video-active');
+
+                if (currentlyPlaying === video) {
+                    currentlyPlaying = null;
+                }
+            }
+        });
+    }, {
+        threshold: [0, 0.3, 0.5, 0.7, 1.0],
+        rootMargin: '-10% 0px -10% 0px' // Slight margin to avoid edge cases
+    });
+
+    // Observe all videos
+    document.querySelectorAll('video').forEach(video => {
+        // Set up video for feed behavior - sound ON by default
+        video.muted = false;
+        video.loop = true;
+        video.playsInline = true;
+        video.preload = 'metadata';
+
+        // Observe for scroll-based autoplay
+        videoObserver.observe(video);
+
+        // Click to unmute/mute toggle
+        video.addEventListener('click', (e) => {
+            if (e.target === video) {
+                video.muted = !video.muted;
+
+                // Show mute indicator
+                const indicator = video.closest('.video-card')?.querySelector('.mute-indicator');
+                if (indicator) {
+                    indicator.textContent = video.muted ? '🔇' : '🔊';
+                    indicator.classList.add('show');
+                    setTimeout(() => indicator.classList.remove('show'), 800);
+                }
+            }
+        });
+    });
+
+    // Add mute indicators to video cards
+    document.querySelectorAll('.video-card').forEach(card => {
+        const indicator = document.createElement('div');
+        indicator.className = 'mute-indicator';
+        indicator.textContent = '🔊';
+        card.style.position = 'relative';
+        card.appendChild(indicator);
+    });
+
+    // ========================================
+    // TIME & DOOM MECHANICS
+    // ========================================
+
+    // Update time display
+    function updateBabelTime() {
+        const now = new Date();
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        document.querySelector('.babel-time .time').textContent = `${hours}:${minutes}`;
+    }
+    setInterval(updateBabelTime, 1000);
+
+    // Random probability fluctuations
+    function fluctuateProbabilities() {
+        document.querySelectorAll('.prediction-fill').forEach(fill => {
+            const currentWidth = parseFloat(fill.style.width);
+            const fluctuation = (Math.random() - 0.5) * 2;
+            const newWidth = Math.max(1, Math.min(99, currentWidth + fluctuation));
+            fill.style.width = `${newWidth}%`;
+            fill.textContent = `${Math.round(newWidth)}%`;
+        });
+    }
+    setInterval(fluctuateProbabilities, 5000);
+
+    // Doom index creep - increases the longer you scroll
+    let doomIndex = 73;
+    let sessionStart = Date.now();
+
+    const doomGaugeFill = document.getElementById('doom-gauge-fill');
+    const edgeGlow = document.getElementById('edge-glow');
+    const sessionStatus = document.getElementById('session-status');
+
+    let previousDoomIndex = doomIndex;
+
+    function creepDoom() {
+        const sessionMinutes = Math.floor((Date.now() - sessionStart) / 60000);
+        const oldDoom = doomIndex;
+
+        // Doom creeps faster the longer you're here
+        if (Math.random() > 0.6) {
+            const creepRate = 0.3 + (sessionMinutes * 0.05);
+            doomIndex = Math.min(99, doomIndex + Math.random() * creepRate);
+        }
+
+        // Update text display
+        if (sessionStatus) {
+            sessionStatus.innerHTML = `SESSION: ${sessionMinutes}m // DOOM INDEX: ${Math.round(doomIndex)}%`;
+        }
+
+        // Update visual doom gauge
+        if (doomGaugeFill) {
+            doomGaugeFill.style.width = `${doomIndex}%`;
+
+            // Flash on doom increase
+            if (Math.round(doomIndex) > Math.round(oldDoom)) {
+                doomGaugeFill.classList.add('doom-flash');
+                setTimeout(() => doomGaugeFill.classList.remove('doom-flash'), 400);
+            }
+
+            if (doomIndex > 85) {
+                doomGaugeFill.classList.add('critical');
+            } else {
+                doomGaugeFill.classList.remove('critical');
+            }
+        }
+
+        // Update edge glow based on doom level
+        if (edgeGlow) {
+            edgeGlow.classList.remove('cyan', 'magenta', 'red');
+            if (doomIndex > 90) {
+                edgeGlow.classList.add('red');
+            } else if (doomIndex > 80) {
+                edgeGlow.classList.add('magenta');
+            } else if (doomIndex > 60) {
+                edgeGlow.classList.add('cyan');
+            }
+        }
+
+        // Update ticker doom index too
+        document.querySelectorAll('.ticker-item').forEach(item => {
+            if (item.textContent.includes('Doom index')) {
+                item.innerHTML = `Doom index: <span class="prob">${Math.round(doomIndex)}%</span> (personal)`;
+            }
+        });
+    }
+    window.doomInterval = setInterval(creepDoom, 5000);
+    creepDoom(); // Initial call
+
+    // ========================================
+    // TAB FILTERING SYSTEM
+    // ========================================
+
+    const tabs = document.querySelectorAll('.tab');
+    const cards = document.querySelectorAll('.feed-container .card');
+    let currentFilter = 'all';
+
+    tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            const category = tab.dataset.category;
+
+            // Skip if already active
+            if (category === currentFilter) return;
+
+            currentFilter = category;
+
+            // Update tab styling
+            tabs.forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+
+            // Filter cards with animation
+            filterCards(category);
+
+            // Show notification
+            showNotification(`Filter: ${category.toUpperCase()}`, `Showing ${category === 'all' ? 'all content' : category + ' posts'}`, 'info');
+        });
+    });
+
+    function filterCards(category) {
+        cards.forEach((card, index) => {
+            const cardCategories = card.dataset.category || '';
+            const shouldShow = category === 'all' || cardCategories.includes(category);
+
+            if (shouldShow) {
+                card.classList.remove('hidden', 'filtering-out');
+                card.classList.add('filtering-in');
+                card.style.animationDelay = `${index * 0.02}s`;
+
+                setTimeout(() => {
+                    card.classList.remove('filtering-in');
+                }, 300);
+            } else {
+                card.classList.add('filtering-out');
+
+                setTimeout(() => {
+                    card.classList.add('hidden');
+                    card.classList.remove('filtering-out');
+                }, 300);
+            }
+        });
+    }
+
+    // ========================================
+    // NOTIFICATION SYSTEM
+    // ========================================
+
+    const notificationContainer = document.getElementById('notifications');
+    let notificationId = 0;
+
+    function showNotification(title, body, type = 'info') {
+        const notification = document.createElement('div');
+        notification.className = `notification ${type}`;
+        notification.id = `notification-${notificationId++}`;
+        notification.innerHTML = `
+            <div class="notification-title">${title}</div>
+            <div class="notification-body">${body}</div>
+        `;
+
+        notification.addEventListener('click', () => {
+            notification.remove();
+        });
+
+        notificationContainer.appendChild(notification);
+
+        // Auto-remove after 5 seconds
+        setTimeout(() => {
+            if (notification.parentNode) {
+                notification.style.animation = 'fade-out 0.3s ease forwards';
+                setTimeout(() => notification.remove(), 300);
+            }
+        }, 5000);
+    }
+
+    // Scheduled notifications for immersion
+    const scheduledNotifications = [
+        { delay: 30000, title: 'FEED SYNC', body: '47 new posts since you started scrolling', type: 'info' },
+        { delay: 60000, title: 'DOOM INDEX', body: 'Your doom index has increased by 3%', type: 'warning' },
+        { delay: 90000, title: 'HEALTH CHECK', body: 'You have been online for over an hour', type: 'warning' },
+        { delay: 120000, title: 'MARKET ALERT', body: 'AGI timeline shifted -2 months', type: 'danger' },
+        { delay: 180000, title: 'FRIEND', body: 'Seli is still waiting for your reply', type: 'info' },
+    ];
+
+    scheduledNotifications.forEach(({ delay, title, body, type }) => {
+        setTimeout(() => showNotification(title, body, type), delay);
+    });
+
+    // ========================================
+    // KEYBOARD NAVIGATION
+    // ========================================
+
+    let focusedCardIndex = -1;
+    let visibleCards = [];
+
+    function updateVisibleCards() {
+        visibleCards = Array.from(cards).filter(card => !card.classList.contains('hidden'));
+    }
+
+    function focusCard(index) {
+        // Remove focus from all cards
+        cards.forEach(card => card.classList.remove('focused'));
+
+        if (index >= 0 && index < visibleCards.length) {
+            focusedCardIndex = index;
+            const card = visibleCards[index];
+            card.classList.add('focused');
+
+            // Scroll into view
+            card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+    }
+
+    function likeCurrentCard() {
+        if (focusedCardIndex >= 0 && focusedCardIndex < visibleCards.length) {
+            const card = visibleCards[focusedCardIndex];
+            const likeBtn = card.querySelector('.card-action');
+
+            if (likeBtn) {
+                likeBtn.classList.toggle('liked');
+                likeBtn.classList.add('animating');
+
+                setTimeout(() => likeBtn.classList.remove('animating'), 300);
+
+                // Update like count
+                const text = likeBtn.textContent;
+                if (text.includes('↑')) {
+                    const match = text.match(/[\d.]+K?/);
+                    if (match) {
+                        showNotification('LIKED', 'Added to your likes', 'info');
+                    }
+                }
+            }
+        }
+    }
+
+    function saveCurrentCard() {
+        if (focusedCardIndex >= 0 && focusedCardIndex < visibleCards.length) {
+            const card = visibleCards[focusedCardIndex];
+            const saveBtn = Array.from(card.querySelectorAll('.card-action')).find(btn =>
+                btn.textContent.includes('SAVE') || btn.textContent.includes('WATCH')
+            );
+
+            if (saveBtn) {
+                saveBtn.classList.toggle('saved');
+                saveBtn.classList.add('animating');
+
+                setTimeout(() => saveBtn.classList.remove('animating'), 300);
+
+                showNotification('SAVED', 'Added to your collection', 'info');
+            }
+        }
+    }
+
+    document.addEventListener('keydown', (e) => {
+        // Ignore if typing in input
+        if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+
+        updateVisibleCards();
+
+        switch(e.key.toLowerCase()) {
+            case 'j':
+                // Next card
+                focusCard(Math.min(focusedCardIndex + 1, visibleCards.length - 1));
+                break;
+            case 'k':
+                // Previous card
+                focusCard(Math.max(focusedCardIndex - 1, 0));
+                break;
+            case 'l':
+                // Like
+                likeCurrentCard();
+                break;
+            case 's':
+                // Save
+                if (!e.ctrlKey && !e.metaKey) {
+                    e.preventDefault();
+                    saveCurrentCard();
+                }
+                break;
+            case 'g':
+                // Go to top
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                focusedCardIndex = -1;
+                cards.forEach(card => card.classList.remove('focused'));
+                break;
+            case '?':
+                // Show help
+                showNotification('KEYBOARD SHORTCUTS', 'J/K: Navigate | L: Like | S: Save | G: Top | 1-6: Filter tabs', 'info');
+                break;
+            case '1': case '2': case '3': case '4': case '5': case '6':
+                // Quick tab switch
+                const tabIndex = parseInt(e.key) - 1;
+                if (tabs[tabIndex]) {
+                    tabs[tabIndex].click();
+                }
+                break;
+        }
+    });
+
+    // Initialize visible cards
+    updateVisibleCards();
+
+    // ========================================
+    // DOOM INDEX ENHANCEMENT
+    // ========================================
+
+    const doomWarning = document.getElementById('doom-warning');
+    const corruptionOverlay = document.getElementById('corruption-overlay');
+    const hostileBanner = document.getElementById('hostile-banner');
+
+    function updateDoomWarning() {
+        if (doomIndex > 85) {
+            doomWarning.classList.add('active');
+            doomWarning.style.background = `radial-gradient(ellipse at center, transparent 40%, rgba(255, 0, 60, ${(doomIndex - 85) / 100}) 100%)`;
+        } else {
+            doomWarning.classList.remove('active');
+        }
+
+        // CRUELTY SQUAD - Progressive corruption stages
+        document.body.classList.remove('corruption-stage-1', 'corruption-stage-2', 'corruption-stage-3', 'doom-flesh-mode');
+        if (edgeGlow) edgeGlow.classList.remove('flesh');
+
+        if (doomIndex > 85) {
+            document.body.classList.add('doom-flesh-mode');
+            if (edgeGlow) {
+                edgeGlow.classList.remove('cyan', 'magenta', 'red');
+                edgeGlow.classList.add('flesh');
+            }
+        } else if (doomIndex > 70) {
+            document.body.classList.add('corruption-stage-3');
+        } else if (doomIndex > 55) {
+            document.body.classList.add('corruption-stage-2');
+        } else if (doomIndex > 40) {
+            document.body.classList.add('corruption-stage-1');
+        }
+
+        // Set intensity variable for other effects
+        const fleshIntensity = Math.max(0, (doomIndex - 40) / 60);
+        document.documentElement.style.setProperty('--flesh-intensity', fleshIntensity);
+
+        // CRUELTY SQUAD - Corruption overlay (mild at 35%, intense at 55%)
+        if (corruptionOverlay) {
+            if (doomIndex > 55) {
+                corruptionOverlay.classList.remove('mild');
+                corruptionOverlay.classList.add('active');
+                corruptionOverlay.style.opacity = Math.min(0.8, 0.3 + (doomIndex - 55) / 60);
+            } else if (doomIndex > 35) {
+                corruptionOverlay.classList.remove('active');
+                corruptionOverlay.classList.add('mild');
+                corruptionOverlay.style.opacity = 0.15 + (doomIndex - 35) / 150;
+            } else {
+                corruptionOverlay.classList.remove('active', 'mild');
+                corruptionOverlay.style.opacity = 0;
+            }
+        }
+    }
+
+    // Initialize corruption state immediately
+    updateDoomWarning();
+
+    // CRUELTY SQUAD - Hostile banner flash
+    function flashHostileBanner() {
+        if (hostileBanner && doomIndex > 65) {
+            hostileBanner.classList.add('active');
+            // Duration scales with doom
+            const duration = 400 + (doomIndex - 65) * 20;
+            setTimeout(() => hostileBanner.classList.remove('active'), duration);
+        }
+    }
+
+    // Enhance the creepDoom function
+    const originalCreepDoom = creepDoom;
+    function enhancedCreepDoom() {
+        originalCreepDoom();
+        updateDoomWarning();
+
+        // Add glitch effect (scales with doom, starts at 60%)
+        if (doomIndex > 60 && Math.random() > (0.95 - (doomIndex - 60) / 200)) {
+            triggerGlitch();
+        }
+
+        // CRUELTY SQUAD - Random hostile banner flashes (more frequent at high doom)
+        const bannerChance = 0.95 - (doomIndex - 65) / 200;
+        if (doomIndex > 65 && Math.random() > bannerChance) {
+            flashHostileBanner();
+        }
+    }
+
+    // Replace interval
+    clearInterval(window.doomInterval);
+    window.doomInterval = setInterval(enhancedCreepDoom, 5000);
+
+    // ========================================
+    // GLITCH EFFECTS (CRUELTY SQUAD ENHANCED)
+    // ========================================
+
+    function triggerGlitch() {
+        const elements = document.querySelectorAll('.logo, .prediction-question, .news-headline');
+        const randomElement = elements[Math.floor(Math.random() * elements.length)];
+
+        if (randomElement) {
+            randomElement.classList.add('glitching');
+            setTimeout(() => randomElement.classList.remove('glitching'), 300);
+        }
+
+        // CRUELTY SQUAD - More aggressive screen glitch
+        const hueShift = Math.random() * 360;
+        const saturation = 1 + Math.random() * 2;
+        document.body.style.filter = `hue-rotate(${hueShift}deg) saturate(${saturation})`;
+        setTimeout(() => {
+            document.body.style.filter = 'none';
+        }, 50 + Math.random() * 100);
+
+        // CRUELTY SQUAD - Random color flash
+        if (Math.random() > 0.7) {
+            const flashColors = ['var(--flesh-pink)', 'var(--sickly-green)', 'var(--bile-yellow)', 'var(--meat-red)'];
+            const flashColor = flashColors[Math.floor(Math.random() * flashColors.length)];
+            document.body.style.backgroundColor = flashColor;
+            setTimeout(() => {
+                document.body.style.backgroundColor = 'var(--bg-void)';
+            }, 30);
+        }
+    }
+
+    // CRUELTY SQUAD - Random glitches scale with doom
+    setInterval(() => {
+        const glitchChance = 0.98 - (doomIndex / 200); // More likely at higher doom
+        if (Math.random() > glitchChance) {
+            triggerGlitch();
+        }
+    }, 4000);
+
+    // CRUELTY SQUAD - Micro-glitches (subtle twitches)
+    setInterval(() => {
+        if (doomIndex > 50 && Math.random() > 0.85) {
+            const cards = document.querySelectorAll('.card');
+            const randomCard = cards[Math.floor(Math.random() * cards.length)];
+            if (randomCard) {
+                randomCard.style.transform = `translate(${(Math.random() - 0.5) * 4}px, ${(Math.random() - 0.5) * 2}px)`;
+                setTimeout(() => {
+                    randomCard.style.transform = '';
+                }, 50);
+            }
+        }
+    }, 2000);
+
+    // CRUELTY SQUAD - Hostile popup system
+    const hostilePopup = document.getElementById('hostile-popup');
+    let popupShown = false;
+
+    function showHostilePopup() {
+        if (hostilePopup && doomIndex > 75 && !popupShown) {
+            popupShown = true;
+            hostilePopup.classList.add('active');
+
+            // Auto-dismiss after random time
+            setTimeout(() => {
+                hostilePopup.classList.remove('active');
+                // Can show again after cooldown
+                setTimeout(() => { popupShown = false; }, 60000);
+            }, 3000 + Math.random() * 2000);
+        }
+    }
+
+    // Popup close button
+    if (hostilePopup) {
+        hostilePopup.querySelector('.popup-close')?.addEventListener('click', () => {
+            hostilePopup.classList.remove('active');
+            setTimeout(() => { popupShown = false; }, 30000);
+        });
+
+        hostilePopup.querySelector('.popup-btn.accept')?.addEventListener('click', () => {
+            // Accepting increases doom
+            doomIndex = Math.min(99, doomIndex + 5);
+            updateDoomDisplay();
+            hostilePopup.classList.remove('active');
+            showNotification('FATE ACCEPTED', 'Doom index +5%', 'error');
+            setTimeout(() => { popupShown = false; }, 45000);
+        });
+    }
+
+    // Random popup trigger
+    setInterval(() => {
+        if (doomIndex > 75 && Math.random() > 0.92) {
+            showHostilePopup();
+        }
+    }, 15000);
+
+    // CRUELTY SQUAD - Screen tear effect
+    const screenTear = document.getElementById('screen-tear');
+    function triggerScreenTear() {
+        if (screenTear && doomIndex > 50) {
+            screenTear.classList.add('active');
+            setTimeout(() => screenTear.classList.remove('active'), 200);
+        }
+    }
+
+    // CRUELTY SQUAD - Static burst effect
+    const staticBurst = document.getElementById('static-burst');
+    function triggerStaticBurst() {
+        if (staticBurst && doomIndex > 60) {
+            staticBurst.classList.add('active');
+            setTimeout(() => staticBurst.classList.remove('active'), 100);
+        }
+    }
+
+    // CRUELTY SQUAD - Invert flash
+    function triggerInvertFlash() {
+        if (doomIndex > 80) {
+            document.body.classList.add('invert-flash');
+            setTimeout(() => document.body.classList.remove('invert-flash'), 50);
+        }
+    }
+
+    // Random chaos effects
+    setInterval(() => {
+        if (doomIndex > 50) {
+            const chaos = Math.random();
+            if (chaos > 0.92) {
+                triggerScreenTear();
+            } else if (chaos > 0.88 && doomIndex > 60) {
+                triggerStaticBurst();
+            } else if (chaos > 0.96 && doomIndex > 80) {
+                triggerInvertFlash();
+            }
+        }
+    }, 3000);
+
+    // Glitch on scroll depth milestones
+    let glitchThresholds = [25, 50, 75, 90];
+    let triggeredThresholds = new Set();
+
+    // ========================================
+    // SCROLL PROGRESS INDICATOR
+    // ========================================
+
+    // Back to top button
+    const backToTopBtn = document.getElementById('back-to-top');
+    if (backToTopBtn) {
+        backToTopBtn.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    }
+
+    // Track scroll depth for "engagement"
+    let maxScrollDepth = 0;
+    window.addEventListener('scroll', () => {
+        const scrollPercent = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
+        maxScrollDepth = Math.max(maxScrollDepth, scrollPercent);
+
+        // Show/hide back to top button
+        if (backToTopBtn) {
+            if (window.scrollY > 500) {
+                backToTopBtn.classList.add('visible');
+            } else {
+                backToTopBtn.classList.remove('visible');
+            }
+        }
+
+        // The deeper you scroll, the faster doom creeps
+        if (scrollPercent > 80 && Math.random() > 0.95) {
+            doomIndex = Math.min(99, doomIndex + 0.5);
+        }
+
+        // Trigger glitch at scroll milestones
+        glitchThresholds.forEach(threshold => {
+            if (scrollPercent >= threshold && !triggeredThresholds.has(threshold)) {
+                triggeredThresholds.add(threshold);
+                triggerGlitch();
+
+                if (threshold >= 75) {
+                    showNotification('DEEP SCROLL', `You've consumed ${threshold}% of the feed`, 'warning');
+                }
+            }
+        });
+    }, { passive: true });
+
+    // ========================================
+    // CLICK-TO-EXPAND FOR LONG POSTS
+    // ========================================
+
+    // Make long forum posts expandable
+    document.querySelectorAll('.forum-card .card-body, .leak-card .card-body').forEach(body => {
+        if (body.scrollHeight > 300) {
+            body.classList.add('expandable');
+
+            const expandBtn = document.createElement('button');
+            expandBtn.className = 'expand-btn';
+            expandBtn.textContent = '▼ EXPAND';
+
+            expandBtn.addEventListener('click', () => {
+                body.classList.toggle('expanded');
+                expandBtn.textContent = body.classList.contains('expanded') ? '▲ COLLAPSE' : '▼ EXPAND';
+            });
+
+            body.parentElement.insertBefore(expandBtn, body.nextSibling);
+        }
+    });
+
+    // ========================================
+    // INITIAL WELCOME NOTIFICATION
+    // ========================================
+
+    setTimeout(() => {
+        showNotification('ACCELERANDO!', 'Welcome back, Rūta. Your doom index awaits.', 'info');
+    }, 2000);
+
+    // Console easter egg
+    console.log('%c ▓▓▓ ACCELERANDO! FEED ▓▓▓ ', 'background: #00d4ff; color: #0a0a0c; font-weight: bold; font-family: monospace;');
+    console.log('%c "We are all accelerating towards something." ', 'color: #ff00aa; font-style: italic;');
+    console.log('%c Session started: ' + new Date().toISOString(), 'color: #5a5a6a;');
+</script>
+
+</body>
+</html>
