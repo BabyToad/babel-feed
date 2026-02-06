@@ -769,12 +769,11 @@
         /* Doom Gauge */
         .doom-gauge {
             position: relative;
-            width: 120px;
-            height: 6px;
+            width: 60px;
+            height: 4px;
             background: var(--border-dim);
-            border-radius: 3px;
+            border-radius: 2px;
             overflow: hidden;
-            margin-top: 0.25rem;
         }
 
         .doom-gauge-fill {
@@ -924,33 +923,19 @@
 
         .user-status {
             font-family: 'JetBrains Mono', monospace;
-            font-size: 0.75rem;
+            font-size: 0.65rem;
             color: var(--text-dim);
             text-align: right;
             display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-            gap: 0.15rem;
-        }
-
-        .header-time {
-            display: flex;
-            align-items: baseline;
-            gap: 0.4rem;
-            margin-bottom: 0.1rem;
+            align-items: center;
+            gap: 0.75rem;
         }
 
         .header-time-value {
-            font-size: 0.85rem;
+            font-size: 0.75rem;
             color: var(--accent-cyan);
             text-shadow: 0 0 8px var(--accent-cyan);
             font-weight: 500;
-        }
-
-        .header-time-date {
-            font-size: 0.55rem;
-            color: var(--text-dim);
-            opacity: 0.7;
         }
 
         .user-handle {
@@ -1757,16 +1742,11 @@
             <span class="logo-accel">ACCELERANDO!</span><span class="logo-sep">//</span><span class="logo-feed">FEED</span>
         </div>
         <div class="user-status">
-            <div class="header-time">
-                <span class="header-time-value" id="header-time">03:47</span>
-                <span class="header-time-date">2074.11.23</span>
-            </div>
+            <span class="header-time-value" id="header-time">03:47</span>
             <span class="user-handle">@ruta_null</span>
-            <span class="user-stack" id="session-status">SESSION: 4h 23m // DOOM INDEX: 73%</span>
             <div class="doom-gauge">
                 <div class="doom-gauge-fill" id="doom-gauge-fill" style="width: 73%"></div>
             </div>
-            <div class="doom-gauge-label">MEMETIC EXPOSURE</div>
         </div>
     </div>
     <div class="tabs">
