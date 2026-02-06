@@ -933,6 +933,26 @@
             gap: 0.15rem;
         }
 
+        .header-time {
+            display: flex;
+            align-items: baseline;
+            gap: 0.5rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .header-time-value {
+            font-size: 1.1rem;
+            color: var(--accent-cyan);
+            text-shadow: 0 0 10px var(--accent-cyan);
+            font-weight: 500;
+        }
+
+        .header-time-date {
+            font-size: 0.65rem;
+            color: var(--text-dim);
+            opacity: 0.7;
+        }
+
         .user-handle {
             color: var(--accent-green);
             text-shadow: 0 0 10px rgba(0, 255, 136, 0.3);
@@ -1647,7 +1667,10 @@
             font-size: 0.7rem;
             color: var(--text-dim);
             text-align: right;
-            z-index: 101;
+            z-index: 99;
+            pointer-events: none;
+            opacity: 0.7;
+            display: none; /* Hide - integrated into header instead */
         }
 
         .babel-time .time {
@@ -1734,6 +1757,10 @@
             <span class="logo-accel">ACCELERANDO!</span><span class="logo-sep">//</span><span class="logo-feed">FEED</span>
         </div>
         <div class="user-status">
+            <div class="header-time">
+                <span class="header-time-value" id="header-time">03:47</span>
+                <span class="header-time-date">2074.11.23</span>
+            </div>
             <span class="user-handle">@ruta_null</span>
             <span class="user-stack" id="session-status">SESSION: 4h 23m // DOOM INDEX: 73%</span>
             <div class="doom-gauge">
@@ -3559,7 +3586,8 @@ who we are anymore."
         const now = new Date();
         const hours = String(now.getHours()).padStart(2, '0');
         const minutes = String(now.getMinutes()).padStart(2, '0');
-        document.querySelector('.babel-time .time').textContent = `${hours}:${minutes}`;
+        const timeEl = document.getElementById('header-time') || document.querySelector('.babel-time .time');
+        if (timeEl) timeEl.textContent = `${hours}:${minutes}`;
     }
     setInterval(updateBabelTime, 1000);
 
