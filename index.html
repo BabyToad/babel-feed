@@ -1195,8 +1195,90 @@
             width: 100%;
             max-height: 500px;
             object-fit: contain;
-            background: #000;
             cursor: pointer;
+        }
+
+        /* Custom Video Controls */
+        .video-wrapper {
+            position: relative;
+        }
+
+        .video-controls {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.9));
+            padding: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.6rem;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .video-wrapper:hover .video-controls,
+        .video-wrapper.playing .video-controls {
+            opacity: 1;
+        }
+
+        .video-controls button {
+            background: transparent;
+            border: 1px solid var(--accent-cyan);
+            color: var(--accent-cyan);
+            padding: 0.25rem 0.5rem;
+            cursor: pointer;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            transition: all 0.2s;
+        }
+
+        .video-controls button:hover {
+            background: var(--accent-cyan);
+            color: var(--bg-void);
+            box-shadow: 0 0 10px var(--accent-cyan);
+        }
+
+        .video-progress {
+            flex: 1;
+            height: 4px;
+            background: var(--border-dim);
+            cursor: pointer;
+            position: relative;
+        }
+
+        .video-progress-fill {
+            height: 100%;
+            background: var(--accent-cyan);
+            box-shadow: 0 0 8px var(--accent-cyan);
+            width: 0%;
+            transition: width 0.1s linear;
+        }
+
+        .video-progress:hover .video-progress-fill {
+            background: var(--accent-magenta);
+            box-shadow: 0 0 8px var(--accent-magenta);
+        }
+
+        .video-time {
+            color: var(--text-dim);
+            min-width: 70px;
+            text-align: right;
+        }
+
+        .video-vol {
+            width: 50px;
+            height: 4px;
+            background: var(--border-dim);
+            cursor: pointer;
+        }
+
+        .video-vol-fill {
+            height: 100%;
+            background: var(--accent-green);
+            width: 100%;
         }
 
         /* Mute indicator */
@@ -1792,9 +1874,18 @@
             </div>
             <div class="card-time">2h ago</div>
         </div>
-        <video controls loop>
-            <source src="media/opus-skin-in-the-game.mp4" type="video/mp4">
-        </video>
+        <div class="video-wrapper">
+            <video loop muted>
+                <source src="media/opus-skin-in-the-game.mp4" type="video/mp4">
+            </video>
+            <div class="video-controls">
+                <button class="vid-play">▶</button>
+                <div class="video-progress"><div class="video-progress-fill"></div></div>
+                <span class="video-time">0:00 / 0:00</span>
+                <button class="vid-mute">🔇</button>
+                <div class="video-vol"><div class="video-vol-fill"></div></div>
+            </div>
+        </div>
         <div class="video-meta">
             <div class="video-title">命懸け認証 // SKIN IN THE GAME CERTIFICATION</div>
             <div class="video-channel">PLEOMETRIC LABS // 21:00 SERIES</div>
@@ -1904,9 +1995,18 @@
             </div>
             <div class="card-time">14h ago</div>
         </div>
-        <video controls loop>
-            <source src="media/cursed-sonic-excruciatingly.mp4" type="video/mp4">
-        </video>
+        <div class="video-wrapper">
+            <video loop muted>
+                <source src="media/cursed-sonic-excruciatingly.mp4" type="video/mp4">
+            </video>
+            <div class="video-controls">
+                <button class="vid-play">▶</button>
+                <div class="video-progress"><div class="video-progress-fill"></div></div>
+                <span class="video-time">0:00 / 0:00</span>
+                <button class="vid-mute">🔇</button>
+                <div class="video-vol"><div class="video-vol-fill"></div></div>
+            </div>
+        </div>
         <div class="video-meta">
             <div class="video-title">EXCRUCIATINGLY MOVING TOWARDS YOU</div>
             <div class="video-channel">@cursed_hedgehog_official</div>
@@ -2132,9 +2232,18 @@ CAPABILITY
             </div>
             <div class="card-time">1d ago</div>
         </div>
-        <video controls loop>
-            <source src="media/abe-simpson-sigma.mp4" type="video/mp4">
-        </video>
+        <div class="video-wrapper">
+            <video loop muted>
+                <source src="media/abe-simpson-sigma.mp4" type="video/mp4">
+            </video>
+            <div class="video-controls">
+                <button class="vid-play">▶</button>
+                <div class="video-progress"><div class="video-progress-fill"></div></div>
+                <span class="video-time">0:00 / 0:00</span>
+                <button class="vid-mute">🔇</button>
+                <div class="video-vol"><div class="video-vol-fill"></div></div>
+            </div>
+        </div>
         <div class="video-meta">
             <div class="video-title">ABE SIMPSON THE SIGMA // SELF-CONTAINED FORM</div>
             <div class="video-channel">@cursed_springfield</div>
@@ -2278,9 +2387,18 @@ CAPABILITY
             </div>
             <div class="card-time">1d ago</div>
         </div>
-        <video controls loop>
-            <source src="media/shadow_egirl.mp4" type="video/mp4">
-        </video>
+        <div class="video-wrapper">
+            <video loop muted>
+                <source src="media/shadow_egirl.mp4" type="video/mp4">
+            </video>
+            <div class="video-controls">
+                <button class="vid-play">▶</button>
+                <div class="video-progress"><div class="video-progress-fill"></div></div>
+                <span class="video-time">0:00 / 0:00</span>
+                <button class="vid-mute">🔇</button>
+                <div class="video-vol"><div class="video-vol-fill"></div></div>
+            </div>
+        </div>
         <div class="video-meta">
             <div class="video-title">SHADOW FIGURE // ANIME COLLAGE // THE VOID STARES BACK</div>
             <div class="video-channel">@liminal_posting</div>
@@ -2386,9 +2504,18 @@ CAPABILITY
             </div>
             <div class="card-time">2d ago</div>
         </div>
-        <video controls loop>
-            <source src="media/simpsons_perspective.mp4" type="video/mp4">
-        </video>
+        <div class="video-wrapper">
+            <video loop muted>
+                <source src="media/simpsons_perspective.mp4" type="video/mp4">
+            </video>
+            <div class="video-controls">
+                <button class="vid-play">▶</button>
+                <div class="video-progress"><div class="video-progress-fill"></div></div>
+                <span class="video-time">0:00 / 0:00</span>
+                <button class="vid-mute">🔇</button>
+                <div class="video-vol"><div class="video-vol-fill"></div></div>
+            </div>
+        </div>
         <div class="video-meta">
             <div class="video-title">FORM // THE SHAPE OF WHAT'S COMING</div>
             <div class="video-channel">@midnight_void_posts</div>
@@ -2550,9 +2677,18 @@ CAPABILITY
             </div>
             <div class="card-time">6h ago</div>
         </div>
-        <video controls loop>
-            <source src="media/spongebob_underclass.mp4" type="video/mp4">
-        </video>
+        <div class="video-wrapper">
+            <video loop muted>
+                <source src="media/spongebob_underclass.mp4" type="video/mp4">
+            </video>
+            <div class="video-controls">
+                <button class="vid-play">▶</button>
+                <div class="video-progress"><div class="video-progress-fill"></div></div>
+                <span class="video-time">0:00 / 0:00</span>
+                <button class="vid-mute">🔇</button>
+                <div class="video-vol"><div class="video-vol-fill"></div></div>
+            </div>
+        </div>
         <div class="video-meta">
             <div class="video-title">UNDERCLASS // THE FACE WHEN // CURSED NICKELODEON</div>
             <div class="video-channel">@late_stage_cartoons</div>
@@ -2702,9 +2838,18 @@ CAPABILITY
             </div>
             <div class="card-time">8h ago</div>
         </div>
-        <video controls loop>
-            <source src="media/pickle_matrix.mp4" type="video/mp4">
-        </video>
+        <div class="video-wrapper">
+            <video loop muted>
+                <source src="media/pickle_matrix.mp4" type="video/mp4">
+            </video>
+            <div class="video-controls">
+                <button class="vid-play">▶</button>
+                <div class="video-progress"><div class="video-progress-fill"></div></div>
+                <span class="video-time">0:00 / 0:00</span>
+                <button class="vid-mute">🔇</button>
+                <div class="video-vol"><div class="video-vol-fill"></div></div>
+            </div>
+        </div>
         <div class="video-meta">
             <div class="video-title">THE ROCK // FUNNIEST PICKLE // BINARY DISSOLUTION</div>
             <div class="video-channel">@simulation_glitches</div>
@@ -3094,9 +3239,18 @@ who we are anymore."
             </div>
             <div class="card-time">4h ago</div>
         </div>
-        <video controls loop>
-            <source src="media/duck_tea_meme.mp4" type="video/mp4">
-        </video>
+        <div class="video-wrapper">
+            <video loop muted>
+                <source src="media/duck_tea_meme.mp4" type="video/mp4">
+            </video>
+            <div class="video-controls">
+                <button class="vid-play">▶</button>
+                <div class="video-progress"><div class="video-progress-fill"></div></div>
+                <span class="video-time">0:00 / 0:00</span>
+                <button class="vid-mute">🔇</button>
+                <div class="video-vol"><div class="video-vol-fill"></div></div>
+            </div>
+        </div>
         <div class="video-meta">
             <div class="video-title">GRINCH DUCK // TEA CEREMONY // DISSOLUTION</div>
             <div class="video-channel">@surreal_tea_posting</div>
@@ -3251,9 +3405,18 @@ who we are anymore."
             </div>
             <div class="card-time">12h ago</div>
         </div>
-        <video controls loop>
-            <source src="media/peter_griffin_slop.mp4" type="video/mp4">
-        </video>
+        <div class="video-wrapper">
+            <video loop muted>
+                <source src="media/peter_griffin_slop.mp4" type="video/mp4">
+            </video>
+            <div class="video-controls">
+                <button class="vid-play">▶</button>
+                <div class="video-progress"><div class="video-progress-fill"></div></div>
+                <span class="video-time">0:00 / 0:00</span>
+                <button class="vid-mute">🔇</button>
+                <div class="video-vol"><div class="video-vol-fill"></div></div>
+            </div>
+        </div>
         <div class="video-meta">
             <div class="video-title">REALISTIC PETER GRIFFIN // AI GENERATED SUFFERING</div>
             <div class="video-channel">@the_algorithm_feeds</div>
@@ -3545,8 +3708,7 @@ who we are anymore."
 
     // Observe all videos
     document.querySelectorAll('video').forEach(video => {
-        // Set up video for feed behavior - sound ON by default
-        video.muted = false;
+        // Set up video for feed behavior - starts muted for autoplay compliance
         video.loop = true;
         video.playsInline = true;
         video.preload = 'metadata';
@@ -3554,29 +3716,16 @@ who we are anymore."
         // Observe for scroll-based autoplay
         videoObserver.observe(video);
 
-        // Click to unmute/mute toggle
+        // Click anywhere on video to toggle play/pause
         video.addEventListener('click', (e) => {
             if (e.target === video) {
-                video.muted = !video.muted;
-
-                // Show mute indicator
-                const indicator = video.closest('.video-card')?.querySelector('.mute-indicator');
-                if (indicator) {
-                    indicator.textContent = video.muted ? '🔇' : '🔊';
-                    indicator.classList.add('show');
-                    setTimeout(() => indicator.classList.remove('show'), 800);
+                if (video.paused) {
+                    video.play();
+                } else {
+                    video.pause();
                 }
             }
         });
-    });
-
-    // Add mute indicators to video cards
-    document.querySelectorAll('.video-card').forEach(card => {
-        const indicator = document.createElement('div');
-        indicator.className = 'mute-indicator';
-        indicator.textContent = '🔊';
-        card.style.position = 'relative';
-        card.appendChild(indicator);
     });
 
     // ========================================
@@ -4190,6 +4339,104 @@ who we are anymore."
     console.log('%c ▓▓▓ ACCELERANDO! FEED ▓▓▓ ', 'background: #00d4ff; color: #0a0a0c; font-weight: bold; font-family: monospace;');
     console.log('%c "We are all accelerating towards something." ', 'color: #ff00aa; font-style: italic;');
     console.log('%c Session started: ' + new Date().toISOString(), 'color: #5a5a6a;');
+
+    // ========================================
+    // CUSTOM VIDEO CONTROLS
+    // ========================================
+
+    function formatTime(seconds) {
+        const mins = Math.floor(seconds / 60);
+        const secs = Math.floor(seconds % 60);
+        return `${mins}:${secs.toString().padStart(2, '0')}`;
+    }
+
+    document.querySelectorAll('.video-wrapper').forEach(wrapper => {
+        const video = wrapper.querySelector('video');
+        const playBtn = wrapper.querySelector('.vid-play');
+        const muteBtn = wrapper.querySelector('.vid-mute');
+        const progress = wrapper.querySelector('.video-progress');
+        const progressFill = wrapper.querySelector('.video-progress-fill');
+        const timeDisplay = wrapper.querySelector('.video-time');
+        const volBar = wrapper.querySelector('.video-vol');
+        const volFill = wrapper.querySelector('.video-vol-fill');
+
+        if (!video || !playBtn) return;
+
+        // Play/Pause button
+        playBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (video.paused) {
+                video.play();
+            } else {
+                video.pause();
+            }
+        });
+
+        // Update play button icon
+        video.addEventListener('play', () => {
+            playBtn.textContent = '⏸';
+            wrapper.classList.add('playing');
+        });
+
+        video.addEventListener('pause', () => {
+            playBtn.textContent = '▶';
+            wrapper.classList.remove('playing');
+        });
+
+        // Progress bar update
+        video.addEventListener('timeupdate', () => {
+            const percent = (video.currentTime / video.duration) * 100;
+            if (progressFill) progressFill.style.width = `${percent}%`;
+            if (timeDisplay) {
+                timeDisplay.textContent = `${formatTime(video.currentTime)} / ${formatTime(video.duration || 0)}`;
+            }
+        });
+
+        // Click on progress bar to seek
+        if (progress) {
+            progress.addEventListener('click', (e) => {
+                const rect = progress.getBoundingClientRect();
+                const percent = (e.clientX - rect.left) / rect.width;
+                video.currentTime = percent * video.duration;
+            });
+        }
+
+        // Mute button
+        if (muteBtn) {
+            muteBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                video.muted = !video.muted;
+                muteBtn.textContent = video.muted ? '🔇' : '🔊';
+                if (volFill) volFill.style.width = video.muted ? '0%' : '100%';
+            });
+        }
+
+        // Volume bar click
+        if (volBar) {
+            volBar.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const rect = volBar.getBoundingClientRect();
+                const percent = (e.clientX - rect.left) / rect.width;
+                video.volume = Math.max(0, Math.min(1, percent));
+                video.muted = false;
+                if (volFill) volFill.style.width = `${percent * 100}%`;
+                if (muteBtn) muteBtn.textContent = '🔊';
+            });
+        }
+
+        // Initialize display
+        video.addEventListener('loadedmetadata', () => {
+            if (timeDisplay) {
+                timeDisplay.textContent = `0:00 / ${formatTime(video.duration)}`;
+            }
+        });
+
+        // Sync mute button with video state
+        video.addEventListener('volumechange', () => {
+            if (muteBtn) muteBtn.textContent = video.muted ? '🔇' : '🔊';
+            if (volFill) volFill.style.width = video.muted ? '0%' : `${video.volume * 100}%`;
+        });
+    });
 </script>
 
 <!-- Credits -->
